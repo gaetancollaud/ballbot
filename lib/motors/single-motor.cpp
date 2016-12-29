@@ -1,11 +1,11 @@
 #include "single-motor.h"
 
-SingleMotor::SingleMotor(structMotorConfig* config, structPid* pidValue)
-  :pinLeft(config->pinLeft), pinRight(config->pinRight), rotaryA(config->rotaryA), rotaryB(config->rotaryB),
+SingleMotor::SingleMotor(structMotorConfig& config, structPid* pidValue)
+  :pinLeft(config.pinLeft), pinRight(config.pinRight), rotaryA(config.rotaryA), rotaryB(config.rotaryB),
   pidSpeed(&currentSpeed, &outputSpeed, &targetSpeed, pidValue){
   this->encoderValue = 0;
   this->lastEncoderValue=0;
-  this->targetSpeed = 0;
+  this->targetSpeed = 5;
   this->maskRotaryA = g_APinDescription[rotaryA].ulPin;
   this->maskRotaryB = g_APinDescription[rotaryB].ulPin;
   pidSpeed.setLimit(MAX_DC_MOTOR_VALUE);
@@ -14,12 +14,15 @@ SingleMotor::SingleMotor(structMotorConfig* config, structPid* pidValue)
 void SingleMotor::init(){
   pinMode(this->pinLeft, OUTPUT);
   pinMode(this->pinRight, OUTPUT);
-  pinMode(this->rotaryA, INPUT_PULLUP);
-  pinMode(this->rotaryB, INPUT_PULLUP);
+
+  //!\ Hardware pullup of 10k must be present, Arduino DUE pullup are too big
+  pinMode(this->rotaryA, INPUT);
+  pinMode(this->rotaryB, INPUT);
 
   analogWrite(this->pinLeft, LOW);
   analogWrite(this->pinRight, LOW);
 
+  MOTOR_DEBUGLN("Motor initilized");
 }
 
 void SingleMotor::setSpeed(double speed){

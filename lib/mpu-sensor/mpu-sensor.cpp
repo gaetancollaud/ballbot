@@ -15,6 +15,8 @@ void MPUSensor::init() {
 	delay(100);
 	digitalWrite(pinCS, HIGH);
 
+	//TODO try to speed up i2c to 400khz
+
 	Wire.begin();
 	accelgyro.initialize();
 	if (!accelgyro.testConnection()) {
@@ -22,6 +24,7 @@ void MPUSensor::init() {
 	}
 
 	accelgyro.setFullScaleGyroRange(MPU6050_GYRO_FS_500);
+	MPU_DEBUGLN("Sensor initilized");
 }
 
 void MPUSensor::reset() {

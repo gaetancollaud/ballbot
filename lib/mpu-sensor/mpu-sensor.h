@@ -7,7 +7,7 @@
 #include <MPU6050.h>
 
 
-#define DEBUG_MPU
+// #define DEBUG_MPU
 
 #ifdef DEBUG_MPU
 	#define MPU_DEBUG(...) Serial.print(__VA_ARGS__);

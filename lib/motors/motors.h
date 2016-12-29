@@ -19,13 +19,16 @@
 
 class Motors{
 public:
-	Motors(structMotorConfig[], structPid* pid);
+	Motors(structMotorConfig& c1, structMotorConfig& c2, structMotorConfig& c3, structPid* pid);
 	void init();
 	void reset();
 	void loop(unsigned long, double);
 
 private:
-	SingleMotor* motors[];
+	SingleMotor m1;
+	SingleMotor m2;
+	SingleMotor m3;
+  SingleMotor* motors[3];
 
 };
 

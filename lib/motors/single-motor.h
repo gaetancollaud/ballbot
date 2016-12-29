@@ -24,7 +24,7 @@
 
 class SingleMotor{
 public:
-  SingleMotor(structMotorConfig* motorConfig, structPid* pidValue);
+  SingleMotor(structMotorConfig& motorConfig, structPid* pidValue);
 
   void init();
 

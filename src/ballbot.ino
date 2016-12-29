@@ -9,11 +9,9 @@ structPid motorSpeedPid = {
   .d=0.0
 };
 
-structMotorConfig motorConfig[] = {
-  {2,3,32,30},
-  {4,5,28,26},
-  {6,7,29,27}
-};
+structMotorConfig m1 = {2,3,32,30};
+structMotorConfig m2 = {4,5,28,26};
+structMotorConfig m3 = {6,7,29,27};
 
 // DCMotor motor1(2, 3, 32 ,30, &pidValue);
 // DCMotor motor2(4, 5, 28, 26, &pidValue);
@@ -21,12 +19,13 @@ structMotorConfig motorConfig[] = {
 
 
 MPUSensor sensor(53);
-Motors motors(motorConfig, &motorSpeedPid);
+Motors motors(m1, m2, m3, &motorSpeedPid);
 
 void setup(){
   Serial.begin(115200);
 
   sensor.init();
+  motors.init();
 
 }
 
@@ -43,4 +42,5 @@ void loop(){
   double dtS = ((double)dtMs)/1000.0;
 
   sensor.loop(now, dtS);
+  motors.loop(now, dtS);
 }
