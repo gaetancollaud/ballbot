@@ -20,8 +20,8 @@
 #endif
 
 #define RESET_LOOP 100
-#define PI 3.14159265359
-#define TWO_PI 6.28318530718
+// #define PI 3.14159265359
+// #define TWO_PI 6.28318530718
 
 #define GYRO_TRUST 0.96
 #define GYRO_REVERSE_TRUST 0.04
