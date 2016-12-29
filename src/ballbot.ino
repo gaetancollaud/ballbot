@@ -27,6 +27,7 @@ void setup(){
   sensor.init();
   motors.init();
 
+  initEncoderInterupt();
 }
 
 unsigned long lastLoop = 0;
@@ -43,4 +44,28 @@ void loop(){
 
   sensor.loop(now, dtS);
   motors.loop(now, dtS);
+}
+
+
+
+
+RoReg* registerEncoder = &g_APinDescription[32].pPort -> PIO_PDSR;
+
+/**
+ * Timer interupt handler
+ */
+void myHandler() {
+  uint32_t value = *registerEncoder;
+  motors.updateEncoders(value);
+}
+
+//TODO put this in motors.h and optimise (call only the good motor and not all of them)
+void initEncoderInterupt() {
+  attachInterrupt(32, myHandler, CHANGE);
+  attachInterrupt(30, myHandler, CHANGE);
+  attachInterrupt(28, myHandler, CHANGE);
+  attachInterrupt(26, myHandler, CHANGE);
+  attachInterrupt(29, myHandler, CHANGE);
+  attachInterrupt(27, myHandler, CHANGE);
+  // Timer.getAvailable().attachInterrupt(myHandler).setFrequency(100000).start();
 }

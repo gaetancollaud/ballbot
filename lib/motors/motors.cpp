@@ -18,7 +18,18 @@ void Motors::loop(unsigned long now, double dtS){
   //compute omni wheel
 
   //update motors
+  // for(int i=0; i<3; i++){
+  //   this->motors[i]->loop(now, dtS);
+  // }
+  // m3.loop(now, dtS);
+  MOTORS_DEBUGLN(this->lastValue, BIN);
+}
+
+
+void Motors::updateEncoders(uint32_t value){
+  this->lastValue = value;
+  //forward to encoders
   for(int i=0; i<3; i++){
-    this->motors[i]->loop(now, dtS);
+    this->motors[i]->updateEncoder(value);
   }
 }

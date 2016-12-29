@@ -24,11 +24,15 @@ public:
 	void reset();
 	void loop(unsigned long, double);
 
+  void updateEncoders(uint32_t value);
+
 private:
 	SingleMotor m1;
 	SingleMotor m2;
 	SingleMotor m3;
   SingleMotor* motors[3];
+
+  uint32_t lastValue;
 
 };
 

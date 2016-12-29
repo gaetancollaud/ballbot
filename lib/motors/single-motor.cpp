@@ -5,19 +5,32 @@ SingleMotor::SingleMotor(structMotorConfig& config, structPid* pidValue)
   pidSpeed(&currentSpeed, &outputSpeed, &targetSpeed, pidValue){
   this->encoderValue = 0;
   this->lastEncoderValue=0;
-  this->targetSpeed = 5;
+  this->targetSpeed = 20;
   this->maskRotaryA = g_APinDescription[rotaryA].ulPin;
   this->maskRotaryB = g_APinDescription[rotaryB].ulPin;
+
   pidSpeed.setLimit(MAX_DC_MOTOR_VALUE);
 }
 
 void SingleMotor::init(){
+
+
+  MOTOR_DEBUG("Mask\t");
+  MOTOR_DEBUG(rotaryA);
+  MOTOR_DEBUG("=>0b");
+  MOTOR_DEBUG(this->maskRotaryA, BIN);
+  MOTOR_DEBUG("\t");
+  MOTOR_DEBUG(rotaryB);
+  MOTOR_DEBUG("=>0b");
+  MOTOR_DEBUGLN(this->maskRotaryB, BIN);
+  delay(100);
+
   pinMode(this->pinLeft, OUTPUT);
   pinMode(this->pinRight, OUTPUT);
 
   //!\ Hardware pullup of 10k must be present, Arduino DUE pullup are too big
-  pinMode(this->rotaryA, INPUT);
-  pinMode(this->rotaryB, INPUT);
+  pinMode(this->rotaryA, INPUT_PULLUP);
+  pinMode(this->rotaryB, INPUT_PULLUP);
 
   analogWrite(this->pinLeft, LOW);
   analogWrite(this->pinRight, LOW);
@@ -44,23 +57,18 @@ void SingleMotor::loop(unsigned long nowMs, double dtS) {
     this->pidSpeed.loop(nowMs, REGULATION_DELAY_S);
     this->writeOutputSpeed();
 
-    // MOTOR_DEBUG("encoder: ");
-    // MOTOR_DEBUG(ev);
-    // MOTOR_DEBUG("count: ");
-    // MOTOR_DEBUG(ecDiff);
-    // MOTOR_DEBUG("current: ");
-    // MOTOR_DEBUG(this->currentSpeed);
-    // MOTOR_DEBUG("\ttarget: ");
-    // MOTOR_DEBUG(this->targetSpeed);
-    // MOTOR_DEBUG("\toutput: ");
-    // MOTOR_DEBUG(this->outputSpeed);
-    // MOTOR_DEBUGLN();
+    MOTOR_DEBUG("encoder: ");
+    MOTOR_DEBUG(ev);
+    MOTOR_DEBUG("count: ");
+    MOTOR_DEBUG(ecDiff);
+    MOTOR_DEBUG("current: ");
+    MOTOR_DEBUG(this->currentSpeed);
+    MOTOR_DEBUG("\ttarget: ");
+    MOTOR_DEBUG(this->targetSpeed);
+    MOTOR_DEBUG("\toutput: ");
+    MOTOR_DEBUG(this->outputSpeed);
+    MOTOR_DEBUGLN();
   }
-
-  // MOTOR_DEBUG(this->encoderValue);
-  // MOTOR_DEBUG((int16_t)digitalRead(this->rotaryA));
-  // MOTOR_DEBUG((int16_t)digitalRead(this->rotaryB));
-  // MOTOR_DEBUGln();
 }
 
 void SingleMotor::updateEncoder(uint32_t mask){
