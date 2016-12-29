@@ -25,7 +25,7 @@ public:
 	void loop(unsigned long, double);
 
 private:
-	SingleMotor* motors;
+	SingleMotor* motors[];
 
 };
 

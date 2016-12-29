@@ -1,7 +1,7 @@
-#include "SingleMotor.h"
+#include "single-motor.h"
 
-SingleMotor::SingleMotor(structMotorConfig config, structPid* pidValue)
-  :pinLeft(config.pinLeft), pinRight(onfig->pinRight), rotaryA(onfig->rotaryA), rotaryB(onfig->rotaryB),
+SingleMotor::SingleMotor(structMotorConfig* config, structPid* pidValue)
+  :pinLeft(config->pinLeft), pinRight(config->pinRight), rotaryA(config->rotaryA), rotaryB(config->rotaryB),
   pidSpeed(&currentSpeed, &outputSpeed, &targetSpeed, pidValue){
   this->encoderValue = 0;
   this->lastEncoderValue=0;
@@ -41,23 +41,23 @@ void SingleMotor::loop(unsigned long nowMs, double dtS) {
     this->pidSpeed.loop(nowMs, REGULATION_DELAY_S);
     this->writeOutputSpeed();
 
-    this->debug("encoder: ");
-    this->debug(ev);
-    this->debug("count: ");
-    this->debug(ecDiff);
-    this->debug("current: ");
-    this->debug(this->currentSpeed);
-    this->debug("\ttarget: ");
-    this->debug(this->targetSpeed);
-    this->debug("\toutput: ");
-    this->debug(this->outputSpeed);
-    this->debugln();
+    // MOTOR_DEBUG("encoder: ");
+    // MOTOR_DEBUG(ev);
+    // MOTOR_DEBUG("count: ");
+    // MOTOR_DEBUG(ecDiff);
+    // MOTOR_DEBUG("current: ");
+    // MOTOR_DEBUG(this->currentSpeed);
+    // MOTOR_DEBUG("\ttarget: ");
+    // MOTOR_DEBUG(this->targetSpeed);
+    // MOTOR_DEBUG("\toutput: ");
+    // MOTOR_DEBUG(this->outputSpeed);
+    // MOTOR_DEBUGLN();
   }
 
-  // this->debug(this->encoderValue);
-  // this->debug((int16_t)digitalRead(this->rotaryA));
-  // this->debug((int16_t)digitalRead(this->rotaryB));
-  // this->debugln();
+  // MOTOR_DEBUG(this->encoderValue);
+  // MOTOR_DEBUG((int16_t)digitalRead(this->rotaryA));
+  // MOTOR_DEBUG((int16_t)digitalRead(this->rotaryB));
+  // MOTOR_DEBUGln();
 }
 
 void SingleMotor::updateEncoder(uint32_t mask){

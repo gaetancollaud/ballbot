@@ -1,7 +1,7 @@
 
+#include <types.h>
 #include <motors.h>
 #include <mpu-sensor.h>
-#include <types.h>
 
 structPid motorSpeedPid = {
   .p=0.5,

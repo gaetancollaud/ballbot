@@ -1,5 +1,5 @@
-#ifndef _PID_H
-#define _PID_H
+#ifndef _TYPES_H
+#define _TYPES_H
 
 typedef struct {
 	double p;

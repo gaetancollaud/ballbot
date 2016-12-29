@@ -5,6 +5,11 @@
 #include <Arduino.h>
 #include <pid.h>
 
+#define MAX_DC_MOTOR_VALUE 255
+#define REGULATION_DELAY_MS 100
+#define REGULATION_DELAY_S 0.1
+#define MOTOR_MIN_SPEED 5
+
 #define DEBUG_MOTOR
 
 #ifdef DEBUG_MOTOR
@@ -17,10 +22,9 @@
 	#define MOTOR_DEBUGVAL(...)
 #endif
 
-
 class SingleMotor{
 public:
-  SingleMotor(structMotorConfig motorConfig, structPid* pidValue);
+  SingleMotor(structMotorConfig* motorConfig, structPid* pidValue);
 
   void init();
 
