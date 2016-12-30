@@ -5,7 +5,7 @@ SingleMotor::SingleMotor(structMotorConfig& config, structPid* pidValue)
   pidSpeed(&currentSpeed, &outputSpeed, &targetSpeed, pidValue){
   this->encoderValue = 0;
   this->lastEncoderValue=0;
-  this->targetSpeed = 20;
+  this->targetSpeed = 0;
   this->maskRotaryA = g_APinDescription[rotaryA].ulPin;
   this->maskRotaryB = g_APinDescription[rotaryB].ulPin;
 
@@ -39,7 +39,7 @@ void SingleMotor::init(){
 }
 
 void SingleMotor::setSpeed(double speed){
-  this->targetSpeed = speed;
+  this->targetSpeed = map(speed, -100, 100, -1300, 1300);
 }
 
 void SingleMotor::loop(unsigned long nowMs, double dtS) {
@@ -47,7 +47,7 @@ void SingleMotor::loop(unsigned long nowMs, double dtS) {
   	this->nextTime = nowMs + REGULATION_DELAY_MS;
 
     long ev = this->encoderValue;
-    this->currentSpeed = ev-this->lastEncoderValue;
+    this->currentSpeed = (ev-this->lastEncoderValue)/REGULATION_DELAY_S;
     this->lastEncoderValue = ev;
 
     long ec = this->encoderCount;

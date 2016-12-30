@@ -2,10 +2,11 @@
 #include <types.h>
 #include <motors.h>
 #include <mpu-sensor.h>
+#include <console.h>
 
 structPid motorSpeedPid = {
-  .p=0.5,
-  .i=15.0,
+  .p=0.1,
+  .i=0.08,
   .d=0.0
 };
 
@@ -13,19 +14,16 @@ structMotorConfig m1 = {2,3,32,30};
 structMotorConfig m2 = {4,5,28,26};
 structMotorConfig m3 = {6,7,29,27};
 
-// DCMotor motor1(2, 3, 32 ,30, &pidValue);
-// DCMotor motor2(4, 5, 28, 26, &pidValue);
-// DCMotor motor3(6, 7, 29 ,27, &pidValue);
-
-
 MPUSensor sensor(53);
 Motors motors(m1, m2, m3, &motorSpeedPid);
+Console console(&motors, &motorSpeedPid);
 
 void setup(){
   Serial.begin(115200);
 
   sensor.init();
   motors.init();
+  console.init();
 
   initEncoderInterupt();
 }
@@ -44,6 +42,7 @@ void loop(){
 
   sensor.loop(now, dtS);
   motors.loop(now, dtS);
+  console.loop(now, dtS);
 }
 
 

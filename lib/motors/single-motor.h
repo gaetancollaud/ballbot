@@ -5,12 +5,12 @@
 #include <Arduino.h>
 #include <pid.h>
 
-#define MAX_DC_MOTOR_VALUE 250
-#define REGULATION_DELAY_MS 100
-#define REGULATION_DELAY_S 0.1
-#define MOTOR_MIN_SPEED 5
+#define MAX_DC_MOTOR_VALUE 255
+#define REGULATION_DELAY_MS 10
+#define REGULATION_DELAY_S 0.01
+#define MOTOR_MIN_SPEED 0
 
-#define DEBUG_MOTOR
+// #define DEBUG_MOTOR
 
 #ifdef DEBUG_MOTOR
 	#define MOTOR_DEBUG(...) Serial.print(__VA_ARGS__);

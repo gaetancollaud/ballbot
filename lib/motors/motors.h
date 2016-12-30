@@ -26,13 +26,13 @@ public:
 
   void updateEncoders(uint32_t value);
 
+	void setSpeed(float speed);
+
 private:
 	SingleMotor m1;
 	SingleMotor m2;
 	SingleMotor m3;
   SingleMotor* motors[3];
-
-  uint32_t lastValue;
 
 };
 

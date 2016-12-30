@@ -16,8 +16,9 @@ void PID::reset() {
 void PID::loop(unsigned long nowMs, double dtS) {
 	// if (nowMs >= this->nextTime) {
 		double p = this->pid->p;
-		double i = this->pid->i;//* PID_DELAY_S_REVERSE;
-		double d = this->pid->d;// * PID_DELAY_S;
+		//TODO pass dtSReverse
+		double i = this->pid->i/dtS;//* PID_DELAY_S_REVERSE;
+		double d = this->pid->d*dtS;// * PID_DELAY_S;
 
 		// this->nextTime = nowMs + PID_DELAY_MS;
 		double input = *this->input;
