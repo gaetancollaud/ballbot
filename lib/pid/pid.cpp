@@ -1,7 +1,7 @@
 #include "pid.h"
 
 PID::PID(double* input, double* output, double* target, structPid* pid)
-: input(input), output(output), target(target), pid(pid) {
+	: input(input), output(output), target(target), pid(pid) {
 	this->reset();
 	this->limit = DEFAULT_PID_LIMIT;
 }
@@ -15,31 +15,31 @@ void PID::reset() {
 
 void PID::loop(unsigned long nowMs, double dtS) {
 	// if (nowMs >= this->nextTime) {
-		double p = this->pid->p;
-		//TODO pass dtSReverse
-		double i = this->pid->i/dtS;//* PID_DELAY_S_REVERSE;
-		double d = this->pid->d*dtS;// * PID_DELAY_S;
+	double p = this->pid->p;
+	//TODO pass dtSReverse
+	double i = this->pid->i/dtS;        //* PID_DELAY_S_REVERSE;
+	double d = this->pid->d*dtS;        // * PID_DELAY_S;
 
-		// this->nextTime = nowMs + PID_DELAY_MS;
-		double input = *this->input;
-		double error = *this->target - input;
+	// this->nextTime = nowMs + PID_DELAY_MS;
+	double input = *this->input;
+	double error = *this->target - input;
 
-		//proportional
-		double proportional = p * error;
+	//proportional
+	double proportional = p * error;
 
-		//integral
-		this->integral += (error * dtS);
-		// this->constraint(&this->integral);
+	//integral
+	this->integral += (error * dtS);
+	this->constraint(&this->integral);
 
-		//derivative
-		double derivative = d * ((error - this->lastError) / dtS);
+	//derivative
+	double derivative = d * ((error - this->lastError) / dtS);
 
-		double output = proportional + i * this->integral + derivative;
-		this->constraint(&output);
+	double output = proportional + i * this->integral + derivative;
+	this->constraint(&output);
 
-		*this->output = output;
+	*this->output = output;
 
-		this->lastError = error;
+	this->lastError = error;
 	// }
 }
 

@@ -9,7 +9,7 @@
 #ifdef DEBUG_MOTORS
 	#define MOTORS_DEBUG(...) Serial.print(__VA_ARGS__);
 	#define MOTORS_DEBUGLN(...) Serial.println(__VA_ARGS__);
-	#define MOTORS_DEBUGVAL(...) Serial.print(__VA_ARGS__);Serial.print("\t");
+	#define MOTORS_DEBUGVAL(...) Serial.print(__VA_ARGS__); Serial.print("\t");
 #else
 	#define MOTORS_DEBUG(...)
 	#define MOTORS_DEBUGLN(...)
@@ -17,22 +17,24 @@
 #endif
 
 
-class Motors{
+class Motors {
 public:
-	Motors(structMotorConfig& c1, structMotorConfig& c2, structMotorConfig& c3, structPid* pid);
-	void init();
-	void reset();
-	void loop(unsigned long, double);
+Motors(structMotorConfig& c1, structMotorConfig& c2, structMotorConfig& c3, structPid* pid);
+void init();
+void reset();
+void loop(unsigned long, double);
 
-  void updateEncoders(uint32_t value);
+void updateEncoderMotor1(uint32_t value);
+void updateEncoderMotor2(uint32_t value);
+void updateEncoderMotor3(uint32_t value);
 
-	void setSpeed(float speed);
+void setSpeed(float x, float y);
 
 private:
-	SingleMotor m1;
-	SingleMotor m2;
-	SingleMotor m3;
-  SingleMotor* motors[3];
+SingleMotor m1;
+SingleMotor m2;
+SingleMotor m3;
+SingleMotor* motors[3];
 
 };
 

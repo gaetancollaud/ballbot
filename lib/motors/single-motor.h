@@ -15,53 +15,50 @@
 #ifdef DEBUG_MOTOR
 	#define MOTOR_DEBUG(...) Serial.print(__VA_ARGS__);
 	#define MOTOR_DEBUGLN(...) Serial.println(__VA_ARGS__);
-	#define MOTOR_DEBUGVAL(...) Serial.print(__VA_ARGS__);Serial.print("\t");
+	#define MOTOR_DEBUGVAL(...) Serial.print(__VA_ARGS__); Serial.print("\t");
 #else
 	#define MOTOR_DEBUG(...)
 	#define MOTOR_DEBUGLN(...)
 	#define MOTOR_DEBUGVAL(...)
 #endif
 
-class SingleMotor{
+class SingleMotor {
 public:
-  SingleMotor(structMotorConfig& motorConfig, structPid* pidValue);
+SingleMotor(structMotorConfig& motorConfig, structPid* pidValue);
 
-  void init();
+void init();
 
-  void setSpeed(double speed);
+void setSpeed(double speed);
 
-  void loop(unsigned long nowMs, double dtS);
+void loop(unsigned long nowMs, double dtS);
 
-  void updateEncoder(uint32_t mask);
+void updateEncoder(uint32_t mask);
 
 private:
-  int pinLeft;
-  int pinRight;
-  int rotaryA;
-  int rotaryB;
+structMotorConfig config;
 
-  PID pidSpeed;
+PID pidSpeed;
 
-  double targetSpeed;
-  double currentSpeed;
-  double outputSpeed;
-  structPid pidValue;
+double targetSpeed;
+double currentSpeed;
+double outputSpeed;
+structPid pidValue;
 
 
-  unsigned long nextTime;
-  volatile long encoderValue;
-  long lastEncoderValue;
-  int lastEncoded;
-  long encoderCount;
-  long lastEncoderCount;
+unsigned long nextTime;
+volatile long encoderValue;
+long lastEncoderValue;
+int lastEncoded;
+long encoderCount;
+long lastEncoderCount;
 
-  int maskRotaryA;
-  int maskRotaryB;
-
-
-  void writeOutputSpeed();
+int maskRotaryA;
+int maskRotaryB;
 
 
-  };
+void writeOutputSpeed();
+
+
+};
 
 #endif
