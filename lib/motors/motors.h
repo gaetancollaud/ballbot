@@ -2,6 +2,7 @@
 #define _MOTORS_H
 
 #include <types.h>
+#include <angles.h>
 #include "single-motor.h"
 
 #define DEBUG_MOTORS
@@ -35,6 +36,7 @@ SingleMotor m1;
 SingleMotor m2;
 SingleMotor m3;
 SingleMotor* motors[3];
+double holoAngle[3];
 
 };
 

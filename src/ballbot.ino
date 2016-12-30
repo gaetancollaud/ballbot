@@ -1,5 +1,6 @@
 
 #include <types.h>
+#include <angles.h>
 #include <motors.h>
 #include <mpu-sensor.h>
 #include <console.h>
@@ -11,9 +12,9 @@ structPid motorSpeedPid = {
 };
 
 RoReg* registerEncoder = &g_APinDescription[32].pPort->PIO_PDSR;
-structMotorConfig m1 = {2,3,32,30, registerEncoder};
-structMotorConfig m2 = {4,5,28,26, registerEncoder};
-structMotorConfig m3 = {6,7,29,27, registerEncoder};
+structMotorConfig m1 = {2,3,32,30, registerEncoder, -PI_60};
+structMotorConfig m2 = {4,5,28,26, registerEncoder, PI_60};
+structMotorConfig m3 = {6,7,29,27, registerEncoder, PI_180};
 
 MPUSensor sensor(53);
 Motors motors(m1, m2, m3, &motorSpeedPid);

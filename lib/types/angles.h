@@ -1,0 +1,13 @@
+#ifndef _ANGLE_H
+#define _ANGLE_H
+
+#define PI_90   1.57079632679489661923
+#define PI_30   0.52359877559
+#define PI_60   1.0471975512
+#define PI_120  2.09439510239
+#define PI_150  2.61799387799
+#define PI_180  3.14159265359
+#define PI_240  4.18879020479
+#define RAD_TO_DEGR     57.2957795131
+
+#endif

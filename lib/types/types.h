@@ -20,6 +20,7 @@ typedef struct {
 	int rotaryA;
 	int rotaryB;
 	RoReg* registerEncoder;
+	double angleRad;
 } structMotorConfig;
 
 #endif

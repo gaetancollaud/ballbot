@@ -44,7 +44,7 @@ void Console::readSpeed(){
 	float s = this->getFloatValue();
 	Serial.print("Set speed to \t");
 	Serial.println(s);
-	this->motors->setSpeed(s, 0);
+	this->motors->setSpeed(0, s);
 }
 
 float Console::getFloatValue(){
