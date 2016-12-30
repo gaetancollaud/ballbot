@@ -5,11 +5,8 @@
 #include <mpu-sensor.h>
 #include <console.h>
 
-structPid motorSpeedPid = {
-	.p=0.1,
-	.i=0.08,
-	.d=0.0
-};
+structPid motorSpeedPid = {.p=0.1, .i=0.08, .d=0.0};
+structPid balancePid = {.p=250, .i=5, .d=100.0};
 
 RoReg* registerEncoder = &g_APinDescription[32].pPort->PIO_PDSR;
 structMotorConfig m1 = {2,3,32,30, registerEncoder, -PI_60};
@@ -18,12 +15,14 @@ structMotorConfig m3 = {6,7,29,27, registerEncoder, PI_180};
 
 MPUSensor sensor(53);
 Motors motors(m1, m2, m3, &motorSpeedPid);
-Console console(&motors, &motorSpeedPid);
+Balance balance(&sensor, &motors, &balancePid);
+Console console(&motors, &balance, &balancePid);
 
 void setup(){
 	Serial.begin(115200);
 
 	sensor.init();
+	balance.init();
 	motors.init();
 	console.init();
 
@@ -31,6 +30,8 @@ void setup(){
 }
 
 unsigned long lastLoop = 0;
+unsigned nextFps = 0;
+int fpsCount = 0;
 void loop(){
 	unsigned long now = millis();
 	unsigned long dtMs = 1;
@@ -39,12 +40,21 @@ void loop(){
 		dtMs = now - lastLoop;
 	}
 	lastLoop = now;
-
 	double dtS = ((double)dtMs)/1000.0;
 
 	sensor.loop(now, dtS);
+	balance.loop(now, dtS);
 	motors.loop(now, dtS);
 	console.loop(now, dtS);
+
+	//fps
+	fpsCount++;
+	if(now>nextFps) {
+		nextFps = now + 1000;
+		Serial.print("FPS: ");
+		Serial.println(fpsCount);
+		fpsCount = 0;
+	}
 }
 
 void motor1Handler() {

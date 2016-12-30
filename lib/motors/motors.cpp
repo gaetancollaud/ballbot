@@ -8,6 +8,7 @@ Motors::Motors(structMotorConfig& c1, structMotorConfig& c2, structMotorConfig& 
 	this->holoAngle[0] = c1.angleRad;
 	this->holoAngle[1] = c2.angleRad;
 	this->holoAngle[2] = c3.angleRad;
+	this->angularSpeed = 0;
 }
 
 void Motors::init(){
@@ -15,6 +16,12 @@ void Motors::init(){
 		this->motors[i]->init();
 	}
 	MOTORS_DEBUGLN("Motors initilized");
+}
+void Motors::reset(){
+	for(int i=0; i<3; i++) {
+		this->motors[i]->reset();
+	}
+	MOTORS_DEBUGLN("Motors reset");
 }
 
 void Motors::loop(unsigned long now, double dtS){
@@ -36,7 +43,7 @@ void Motors::updateEncoderMotor3(uint32_t value){
 	this->m3.updateEncoder(value);
 }
 
-void Motors::setSpeed(float dx, float dy){
+void Motors::setSpeed(double dx, double dy){
 
 	double vectorSize = constrain(sqrt(dx * dx + dy * dy), -100, 100);
 	double vectorAngle = atan2(dy, dx) + PI_180;
@@ -49,9 +56,11 @@ void Motors::setSpeed(float dx, float dy){
 	MOTORS_DEBUG(":");
 	MOTORS_DEBUGLN(vectorAngle*RAD_TO_DEGR);
 
-	int16_t angular_speed = 0;
-	int16_t speeds[3];
 	for (int i = 0; i < 3; i++) {
-		this->motors[i]->setSpeed(vectorSize * sin(vectorAngle + this->holoAngle[i]) + angular_speed);
+		this->motors[i]->setSpeed(vectorSize * sin(vectorAngle + this->holoAngle[i]) + this->angularSpeed);
 	}
+}
+
+void Motors::setAngularSpeed(double v){
+	this->angularSpeed = v;
 }

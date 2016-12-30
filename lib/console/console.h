@@ -2,22 +2,24 @@
 #define _CONSOLE_H
 
 #include <motors.h>
+#include <balance.h>
 
-class Console{
+class Console {
 public:
-	Console(Motors* motors, structPid* motorPid);
-	void init();
-	void loop(unsigned long, double);
+Console(Motors* motors, Balance* balance, structPid* motorPid);
+void init();
+void loop(unsigned long, double);
 
 private:
-  Motors* motors;
-  structPid* motorPid;
+Motors* motors;
+Balance* balance;
+structPid* motorPid;
 
-  String inputString;
+String inputString;
 
-  void analyse();
-  void readSpeed();
-  float getFloatValue();
+void analyse();
+void readSpeed();
+float getFloatValue();
 
 };
 

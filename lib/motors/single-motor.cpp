@@ -26,6 +26,10 @@ void SingleMotor::init(){
 	MOTOR_DEBUGLN("Motor initilized");
 }
 
+void SingleMotor::reset(){
+	this->pidSpeed.reset();
+}
+
 void SingleMotor::setSpeed(double speed){
 	this->targetSpeed = map(speed, -100, 100, -1300, 1300);
 }

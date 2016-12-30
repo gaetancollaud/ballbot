@@ -5,7 +5,7 @@
 #include <angles.h>
 #include "single-motor.h"
 
-#define DEBUG_MOTORS
+// #define DEBUG_MOTORS
 
 #ifdef DEBUG_MOTORS
 	#define MOTORS_DEBUG(...) Serial.print(__VA_ARGS__);
@@ -29,7 +29,8 @@ void updateEncoderMotor1(uint32_t value);
 void updateEncoderMotor2(uint32_t value);
 void updateEncoderMotor3(uint32_t value);
 
-void setSpeed(float x, float y);
+void setSpeed(double x, double y);
+void setAngularSpeed(double s);
 
 private:
 SingleMotor m1;
@@ -37,6 +38,7 @@ SingleMotor m2;
 SingleMotor m3;
 SingleMotor* motors[3];
 double holoAngle[3];
+double angularSpeed;
 
 };
 

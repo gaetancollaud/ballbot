@@ -27,14 +27,13 @@ public:
 SingleMotor(structMotorConfig& motorConfig, structPid* pidValue);
 
 void init();
-
+void reset();
 void setSpeed(double speed);
-
 void loop(unsigned long nowMs, double dtS);
-
 void updateEncoder(uint32_t mask);
 
 private:
+
 structMotorConfig config;
 
 PID pidSpeed;
@@ -43,7 +42,6 @@ double targetSpeed;
 double currentSpeed;
 double outputSpeed;
 structPid pidValue;
-
 
 unsigned long nextTime;
 volatile long encoderValue;

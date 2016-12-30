@@ -1,6 +1,6 @@
 #include "console.h"
 
-Console::Console(Motors* motors, structPid* motorPid) : motors(motors), motorPid(motorPid){
+Console::Console(Motors* motors, Balance* balance, structPid* motorPid) : motors(motors), balance(balance), motorPid(motorPid){
 
 }
 
@@ -33,6 +33,11 @@ void Console::analyse(){
 		this->motorPid->d = this->getFloatValue();
 	}else if(inputString.startsWith("s")) {
 		this->readSpeed();
+	}else if(inputString.startsWith("r")) {
+		this->motors->reset();
+		this->balance->reset();
+	}else if(inputString.startsWith("e")) {
+		this->balance->toggleEnable();
 	}else{
 		Serial.print("Error command unknown");
 	}
