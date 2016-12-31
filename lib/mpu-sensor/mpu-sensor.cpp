@@ -74,19 +74,38 @@ double* MPUSensor::getAngleYptr() {
 }
 
 void MPUSensor::refreshSensors() {
-	accelgyro.getMotion6(&this->ax, &this->ay, &this->az, &this->gx, &this->gy, &this->gz);
+	int loop = 5;
+	double axSum = 0, aySum = 0, azSum = 0, gxSum = 0, gySum = 0, gzSum = 0;
+	for (int i = 0; i < loop; i++) {
+		accelgyro.getMotion6(&this->ax, &this->ay, &this->az, &this->gx, &this->gy, &this->gz);
+		axSum += this->ax;
+		aySum += this->ay;
+		azSum += this->az;
+		gxSum += this->gx;
+		gySum += this->gy;
+		gzSum += this->gz;
+	}
+
+	double factor = 1.0 / loop;
+	this->ax = axSum*factor;
+	this->ay = aySum*factor;
+	this->az = azSum*factor;
+	this->gx = gxSum;
+	this->gy = gySum;
+	this->gz = gzSum;
+	// accelgyro.getMotion6(&this->ax, &this->ay, &this->az, &this->gx, &this->gy, &this->gz);
 
 	if (
-			abs(this->ax) >= ALLERT_TRESHOLD ||
-			abs(this->ay) >= ALLERT_TRESHOLD ||
-			abs(this->az) >= ALLERT_TRESHOLD) {
+		abs(this->ax) >= ALLERT_TRESHOLD ||
+		abs(this->ay) >= ALLERT_TRESHOLD ||
+		abs(this->az) >= ALLERT_TRESHOLD) {
 		Serial.println("/!\\ MPU6050 Accel limits !!!");
 	}
 
 	if (
-			abs(this->gx) >= ALLERT_TRESHOLD ||
-			abs(this->gy) >= ALLERT_TRESHOLD ||
-			abs(this->gz) >= ALLERT_TRESHOLD) {
+		abs(this->gx) >= ALLERT_TRESHOLD ||
+		abs(this->gy) >= ALLERT_TRESHOLD ||
+		abs(this->gz) >= ALLERT_TRESHOLD) {
 		Serial.println("/!\\ MPU6050 Gyro limits !!!");
 	}
 

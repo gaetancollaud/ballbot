@@ -5,8 +5,8 @@
 #include <mpu-sensor.h>
 #include <pid.h>
 
-#define BALANCE_DELAY_MS 5
-#define BALANCE_DELAY_S 0.005
+#define BALANCE_DELAY_MS 10
+#define BALANCE_DELAY_S 0.010
 
 class Balance {
 public:

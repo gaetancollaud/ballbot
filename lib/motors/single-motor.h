@@ -6,8 +6,8 @@
 #include <pid.h>
 
 #define MAX_DC_MOTOR_VALUE 255
-#define REGULATION_DELAY_MS 5
-#define REGULATION_DELAY_S 0.005
+#define REGULATION_DELAY_MS 10
+#define REGULATION_DELAY_S 0.010
 #define MOTOR_MIN_SPEED 0
 
 // #define DEBUG_MOTOR

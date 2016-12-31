@@ -26,6 +26,8 @@ void setup(){
 	motors.init();
 	console.init();
 
+	sensor.reset();
+
 	initEncoderInterupt();
 }
 
@@ -55,6 +57,7 @@ void loop(){
 		Serial.println(fpsCount);
 		fpsCount = 0;
 	}
+
 }
 
 void motor1Handler() {
