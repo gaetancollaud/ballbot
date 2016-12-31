@@ -38,6 +38,10 @@ void Console::analyse(){
 		this->balance->reset();
 	}else if(inputString.startsWith("e")) {
 		this->balance->toggleEnable();
+	}else if(inputString.startsWith("l")) {
+		this->balance->setMaxIntegral(this->getFloatValue());
+	}else if(inputString.startsWith("o")) {
+		this->balance->setMaxOutput(this->getFloatValue());
 	}else{
 		Serial.print("Error command unknown");
 	}

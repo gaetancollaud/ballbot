@@ -6,7 +6,7 @@
 #include <console.h>
 
 structPid motorSpeedPid = {.p=0.1, .i=0.08, .d=0.0};
-structPid balancePid = {.p=250, .i=5, .d=100.0};
+structPid balancePid = {.p=280.0, .i=10.0, .d=100.0};
 
 RoReg* registerEncoder = &g_APinDescription[32].pPort->PIO_PDSR;
 structMotorConfig m1 = {2,3,32,30, registerEncoder, -PI_60};

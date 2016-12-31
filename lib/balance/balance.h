@@ -15,6 +15,8 @@ void init();
 void reset();
 void loop(unsigned long, double);
 void toggleEnable();
+void setMaxIntegral(double v);
+void setMaxOutput(double v);
 
 private:
 MPUSensor* sensor;

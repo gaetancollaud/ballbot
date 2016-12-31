@@ -6,6 +6,15 @@ Balance::Balance(MPUSensor* sensor, Motors* motors, structPid* pidBalance) : sen
 	this->targetBalanceX = 0;
 	this->nextTime = 0;
 	this->enable = false;
+
+	double maxOutput = 80;
+	double maxIntegral = 0.01;
+	pidBalanceX.setLimitOutput(maxOutput);
+	pidBalanceY.setLimitOutput(maxOutput);
+	pidBalanceX.setLimitIntegral(maxIntegral);
+	pidBalanceY.setLimitIntegral(maxIntegral);
+	pidBalanceX.enableDebug();
+	pidBalanceY.enableDebug();
 }
 
 void Balance::init(){
@@ -20,6 +29,16 @@ void Balance::toggleEnable(){
 	}else{
 		this->motors->setSpeed(0,0);
 	}
+}
+
+void Balance::setMaxIntegral(double v){
+	pidBalanceX.setLimitIntegral(v);
+	pidBalanceY.setLimitIntegral(v);
+}
+
+void Balance::setMaxOutput(double v){
+	pidBalanceX.setLimitOutput(v);
+	pidBalanceY.setLimitOutput(v);
 }
 
 void Balance::reset(){

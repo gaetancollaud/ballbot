@@ -48,7 +48,7 @@ void Motors::setSpeed(double dx, double dy){
 	double vectorSize = constrain(sqrt(dx * dx + dy * dy), -100, 100);
 	double vectorAngle = atan2(dy, dx) + PI_180;
 	if(abs(vectorSize)>=99) {
-		Serial.println("Max vector size reached");
+		// Serial.println("Max vector size reached");
 	}
 
 	MOTORS_DEBUG("vect\t");

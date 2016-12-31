@@ -3,7 +3,9 @@
 PID::PID(double* input, double* output, double* target, structPid* pid)
 	: input(input), output(output), target(target), pid(pid) {
 	this->reset();
-	this->limit = DEFAULT_PID_LIMIT;
+	this->limitOutput = DEFAULT_PID_LIMIT;
+	this->limitIntegral = DEFAULT_PID_LIMIT;
+	this->debug = false;
 }
 
 void PID::reset() {
@@ -29,13 +31,13 @@ void PID::loop(unsigned long nowMs, double dtS) {
 
 	//integral
 	this->integral += (error * dtS);
-	this->constraint(&this->integral);
+	this->constraint(&this->integral, this->limitIntegral, "integral");
 
 	//derivative
 	double derivative = d * ((error - this->lastError) / dtS);
 
 	double output = proportional + i * this->integral + derivative;
-	this->constraint(&output);
+	this->constraint(&output, this->limitOutput, "output");
 
 	*this->output = output;
 
@@ -43,15 +45,31 @@ void PID::loop(unsigned long nowMs, double dtS) {
 	// }
 }
 
-void PID::setLimit(double limit){
-	this->limit = limit;
+void PID::enableDebug(){
+	this->debug = true;
 }
 
-void PID::constraint(double* v) {
-	double lim = this->limit;
+void PID::setLimitOutput(double limit){
+	this->limitOutput = limit;
+}
+
+void PID::setLimitIntegral(double limit){
+	this->limitIntegral = limit;
+}
+
+void PID::constraint(double* v, double lim, String deb) {
 	if (*v > lim) {
 		*v = lim;
-	} else if (*v < -lim) {
+		if(this->debug) {
+			Serial.print("High limit: ");
+			Serial.println(deb);
+		}
+	}
+	else if (*v < -lim) {
 		*v = -lim;
+		if(this->debug) {
+			Serial.print("Low limit: ");
+			Serial.println(deb);
+		}
 	}
 }

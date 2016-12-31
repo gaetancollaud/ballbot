@@ -8,7 +8,7 @@ SingleMotor::SingleMotor(structMotorConfig& config, structPid* pidValue)
 	this->maskRotaryA = g_APinDescription[config.rotaryA].ulPin;
 	this->maskRotaryB = g_APinDescription[config.rotaryB].ulPin;
 
-	pidSpeed.setLimit(MAX_DC_MOTOR_VALUE);
+	pidSpeed.setLimitOutput(MAX_DC_MOTOR_VALUE);
 }
 
 void SingleMotor::init(){

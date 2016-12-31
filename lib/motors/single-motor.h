@@ -5,7 +5,7 @@
 #include <Arduino.h>
 #include <pid.h>
 
-#define MAX_DC_MOTOR_VALUE 100
+#define MAX_DC_MOTOR_VALUE 255
 #define REGULATION_DELAY_MS 5
 #define REGULATION_DELAY_S 0.005
 #define MOTOR_MIN_SPEED 0
