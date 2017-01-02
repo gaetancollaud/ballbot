@@ -1,6 +1,7 @@
 #include "console.h"
 
-Console::Console(Motors* motors, Balance* balance, structPid* motorPid) : motors(motors), balance(balance), motorPid(motorPid){
+Console::Console(Motors* motors, Balance* balance, Position* position, structPid* balancePid, structPid* positionPid) :
+	motors(motors), balance(balance), position(position), balancePid(balancePid), positionPid(positionPid){
 
 }
 
@@ -26,18 +27,24 @@ void Console::loop(unsigned long, double){
 void Console::analyse(){
 	Serial.println(inputString);
 	if(inputString.startsWith("p")) {
-		this->motorPid->p = this->getFloatValue();
+		this->balancePid->p = this->getFloatValue();
 	}else if(inputString.startsWith("i")) {
-		this->motorPid->i = this->getFloatValue();
+		this->balancePid->i = this->getFloatValue();
 	}else if(inputString.startsWith("d")) {
-		this->motorPid->d = this->getFloatValue();
+		this->balancePid->d = this->getFloatValue();
+	}else if(inputString.startsWith("a")) {
+		this->positionPid->p = this->getFloatValue();
 	}else if(inputString.startsWith("s")) {
-		this->readSpeed();
+		this->positionPid->i = this->getFloatValue();
+	}else if(inputString.startsWith("d")) {
+		this->positionPid->d = this->getFloatValue();
 	}else if(inputString.startsWith("r")) {
 		this->motors->reset();
 		this->balance->reset();
+		this->position->reset();
 	}else if(inputString.startsWith("e")) {
 		this->balance->toggleEnable();
+		this->position->toggleEnable();
 	}else if(inputString.startsWith("l")) {
 		this->balance->setMaxIntegral(this->getFloatValue());
 	}else if(inputString.startsWith("o")) {
@@ -47,13 +54,6 @@ void Console::analyse(){
 	}
 	// clear the string:
 	inputString = "";
-}
-
-void Console::readSpeed(){
-	float s = this->getFloatValue();
-	Serial.print("Set speed to \t");
-	Serial.println(s);
-	this->motors->setSpeed(0, s);
 }
 
 float Console::getFloatValue(){

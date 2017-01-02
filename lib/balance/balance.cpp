@@ -4,11 +4,12 @@ Balance::Balance(MPUSensor* sensor, Motors* motors, structPid* pidBalance) : sen
 	pidBalanceY(sensor->getAngleYptr(), &outputBalanceY, &targetBalanceY, pidBalance)
 {
 	this->targetBalanceX = 0;
+	this->targetBalanceY = 0;
 	this->nextTime = 0;
 	this->enable = false;
 
-	double maxOutput = 80;
-	double maxIntegral = 0.01;
+	double maxOutput = 90;
+	double maxIntegral = 0.05;
 	pidBalanceX.setLimitOutput(maxOutput);
 	pidBalanceY.setLimitOutput(maxOutput);
 	pidBalanceX.setLimitIntegral(maxIntegral);
@@ -39,6 +40,11 @@ void Balance::setMaxIntegral(double v){
 void Balance::setMaxOutput(double v){
 	pidBalanceX.setLimitOutput(v);
 	pidBalanceY.setLimitOutput(v);
+}
+
+void Balance::setTargetAngle(double x, double y){
+	this->targetBalanceX = x;
+	this->targetBalanceY = y;
 }
 
 void Balance::reset(){

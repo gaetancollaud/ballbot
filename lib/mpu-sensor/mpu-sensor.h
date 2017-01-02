@@ -12,7 +12,7 @@
 #ifdef DEBUG_MPU
 	#define MPU_DEBUG(...) Serial.print(__VA_ARGS__);
 	#define MPU_DEBUGLN(...) Serial.println(__VA_ARGS__);
-	#define MPU_DEBUGVAL(...) Serial.print(__VA_ARGS__);Serial.print("\t");
+	#define MPU_DEBUGVAL(...) Serial.print(__VA_ARGS__); Serial.print("\t");
 #else
 	#define MPU_DEBUG(...)
 	#define MPU_DEBUGLN(...)
@@ -20,6 +20,7 @@
 #endif
 
 #define RESET_LOOP 100
+#define AVERAGE_LOOP 3
 // #define PI 3.14159265359
 // #define TWO_PI 6.28318530718
 
@@ -37,30 +38,30 @@
 //70% of 2^15
 #define ALLERT_TRESHOLD 22937
 
-class MPUSensor{
+class MPUSensor {
 public:
-	MPUSensor(int);
-	void init();
-	void reset();
-	void loop(unsigned long, double);
+MPUSensor(int);
+void init();
+void reset();
+void loop(unsigned long, double);
 
-	double* getAngleXptr();
-	double* getAngleYptr();
+double* getAngleXptr();
+double* getAngleYptr();
 
 private:
-	int pinCS;
+int pinCS;
 
-	MPU6050 accelgyro;
-	int16_t ax, ay, az, gx, gy, gz;
-	int16_t zax, zay, zaz, zgx, zgy, zgz;
+MPU6050 accelgyro;
+int16_t ax, ay, az, gx, gy, gz;
+int16_t zax, zay, zaz, zgx, zgy, zgz;
 
-	double angleX;
-	double angleY;
+double angleX;
+double angleY;
 
-	void refreshSensors();
-	void computeAngles(double);
-	double constraintAngle(double*);
-	double toReadableDegr(double);
+void refreshSensors();
+void computeAngles(double);
+double constraintAngle(double*);
+double toReadableDegr(double);
 
 };
 

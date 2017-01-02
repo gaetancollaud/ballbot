@@ -74,9 +74,8 @@ double* MPUSensor::getAngleYptr() {
 }
 
 void MPUSensor::refreshSensors() {
-	int loop = 5;
 	double axSum = 0, aySum = 0, azSum = 0, gxSum = 0, gySum = 0, gzSum = 0;
-	for (int i = 0; i < loop; i++) {
+	for (int i = 0; i < AVERAGE_LOOP; i++) {
 		accelgyro.getMotion6(&this->ax, &this->ay, &this->az, &this->gx, &this->gy, &this->gz);
 		axSum += this->ax;
 		aySum += this->ay;
@@ -86,7 +85,7 @@ void MPUSensor::refreshSensors() {
 		gzSum += this->gz;
 	}
 
-	double factor = 1.0 / loop;
+	double factor = 1.0 / AVERAGE_LOOP;
 	this->ax = axSum*factor;
 	this->ay = aySum*factor;
 	this->az = azSum*factor;
@@ -99,14 +98,14 @@ void MPUSensor::refreshSensors() {
 		abs(this->ax) >= ALLERT_TRESHOLD ||
 		abs(this->ay) >= ALLERT_TRESHOLD ||
 		abs(this->az) >= ALLERT_TRESHOLD) {
-		Serial.println("/!\\ MPU6050 Accel limits !!!");
+		// Serial.println("/!\\ MPU6050 Accel limits !!!");
 	}
 
 	if (
 		abs(this->gx) >= ALLERT_TRESHOLD ||
 		abs(this->gy) >= ALLERT_TRESHOLD ||
 		abs(this->gz) >= ALLERT_TRESHOLD) {
-		Serial.println("/!\\ MPU6050 Gyro limits !!!");
+		// Serial.println("/!\\ MPU6050 Gyro limits !!!");
 	}
 
 

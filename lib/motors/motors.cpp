@@ -9,6 +9,10 @@ Motors::Motors(structMotorConfig& c1, structMotorConfig& c2, structMotorConfig& 
 	this->holoAngle[1] = c2.angleRad;
 	this->holoAngle[2] = c3.angleRad;
 	this->angularSpeed = 0;
+	this->positionX = 0;
+	this->positionY = 0;
+	this->speedX = 0;
+	this->speedY = 0;
 }
 
 void Motors::init(){
@@ -18,6 +22,10 @@ void Motors::init(){
 	MOTORS_DEBUGLN("Motors initilized");
 }
 void Motors::reset(){
+	this->positionX = 0;
+	this->positionY = 0;
+	this->speedX = 0;
+	this->speedY = 0;
 	for(int i=0; i<3; i++) {
 		this->motors[i]->reset();
 	}
@@ -25,6 +33,9 @@ void Motors::reset(){
 }
 
 void Motors::loop(unsigned long now, double dtS){
+	this->positionX += this->speedX*dtS;
+	this->positionY += this->speedY*dtS;
+
 	//update motors
 	for(int i=0; i<3; i++) {
 		this->motors[i]->loop(now, dtS);
@@ -63,4 +74,12 @@ void Motors::setSpeed(double dx, double dy){
 
 void Motors::setAngularSpeed(double v){
 	this->angularSpeed = v;
+}
+
+double* Motors::getPositionXPtr(){
+	return &this->positionX;
+}
+
+double* Motors::getPositionYPtr(){
+	return &this->positionY;
 }

@@ -17,6 +17,7 @@ void loop(unsigned long, double);
 void toggleEnable();
 void setMaxIntegral(double v);
 void setMaxOutput(double v);
+void setTargetAngle(double x, double y);
 
 private:
 MPUSensor* sensor;

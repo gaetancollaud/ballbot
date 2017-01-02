@@ -32,6 +32,9 @@ void updateEncoderMotor3(uint32_t value);
 void setSpeed(double x, double y);
 void setAngularSpeed(double s);
 
+double* getPositionXPtr();
+double* getPositionYPtr();
+
 private:
 SingleMotor m1;
 SingleMotor m2;
@@ -39,6 +42,11 @@ SingleMotor m3;
 SingleMotor* motors[3];
 double holoAngle[3];
 double angularSpeed;
+
+double speedX;
+double speedY;
+double positionX;
+double positionY;
 
 };
 

@@ -3,22 +3,24 @@
 
 #include <motors.h>
 #include <balance.h>
+#include <position.h>
 
 class Console {
 public:
-Console(Motors* motors, Balance* balance, structPid* motorPid);
+Console(Motors* motors, Balance* balance, Position* position, structPid* balancePid, structPid* positionPid);
 void init();
 void loop(unsigned long, double);
 
 private:
 Motors* motors;
 Balance* balance;
-structPid* motorPid;
+Position* position;
+structPid* balancePid;
+structPid* positionPid;
 
 String inputString;
 
 void analyse();
-void readSpeed();
 float getFloatValue();
 
 };

@@ -4,9 +4,11 @@
 #include <motors.h>
 #include <mpu-sensor.h>
 #include <console.h>
+#include <position.h>
 
 structPid motorSpeedPid = {.p=0.1, .i=0.08, .d=0.0};
-structPid balancePid = {.p=280.0, .i=10.0, .d=100.0};
+structPid balancePid = {.p=100.0, .i=12.0, .d=0.0};
+structPid positionPid = {.p=1.0, .i=0.0, .d=0.0};
 
 RoReg* registerEncoder = &g_APinDescription[32].pPort->PIO_PDSR;
 structMotorConfig m1 = {2,3,32,30, registerEncoder, -PI_60};
@@ -16,13 +18,15 @@ structMotorConfig m3 = {6,7,29,27, registerEncoder, PI_180};
 MPUSensor sensor(53);
 Motors motors(m1, m2, m3, &motorSpeedPid);
 Balance balance(&sensor, &motors, &balancePid);
-Console console(&motors, &balance, &balancePid);
+Position position(&balance, &motors, &positionPid);
+Console console(&motors, &balance, &position, &balancePid, &positionPid);
 
 void setup(){
 	Serial.begin(115200);
 
 	sensor.init();
 	balance.init();
+	position.init();
 	motors.init();
 	console.init();
 
@@ -45,6 +49,7 @@ void loop(){
 	double dtS = ((double)dtMs)/1000.0;
 
 	sensor.loop(now, dtS);
+	position.loop(now, dtS);
 	balance.loop(now, dtS);
 	motors.loop(now, dtS);
 	console.loop(now, dtS);
