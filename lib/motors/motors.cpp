@@ -55,6 +55,8 @@ void Motors::updateEncoderMotor3(uint32_t value){
 }
 
 void Motors::setSpeed(double dx, double dy){
+	this->speedX = dx;
+	this->speedY = dy;
 
 	double vectorSize = constrain(sqrt(dx * dx + dy * dy), -100, 100);
 	double vectorAngle = atan2(dy, dx) + PI_180;

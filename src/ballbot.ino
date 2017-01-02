@@ -7,8 +7,9 @@
 #include <position.h>
 
 structPid motorSpeedPid = {.p=0.1, .i=0.08, .d=0.0};
-structPid balancePid = {.p=100.0, .i=12.0, .d=0.0};
-structPid positionPid = {.p=1.0, .i=0.0, .d=0.0};
+structPid balancePid = {.p=100.0, .i=11.0, .d=0.0};
+// structPid balancePid = {.p=100.0, .i=20.0, .d=0.0};
+structPid positionPid = {.p=0.000, .i=0.0, .d=0.0};
 
 RoReg* registerEncoder = &g_APinDescription[32].pPort->PIO_PDSR;
 structMotorConfig m1 = {2,3,32,30, registerEncoder, -PI_60};
@@ -37,6 +38,7 @@ void setup(){
 
 unsigned long lastLoop = 0;
 unsigned nextFps = 0;
+unsigned nextPid= 0;
 int fpsCount = 0;
 void loop(){
 	unsigned long now = millis();
@@ -61,6 +63,15 @@ void loop(){
 		Serial.print("FPS: ");
 		Serial.println(fpsCount);
 		fpsCount = 0;
+	}
+	if(now>nextPid) {
+		nextPid = now + 10000;
+		Serial.print("PID: ");
+		Serial.print(balancePid.p);
+		Serial.print("\t");
+		Serial.print(balancePid.i);
+		Serial.print("\t");
+		Serial.println(balancePid.d);
 	}
 
 }
