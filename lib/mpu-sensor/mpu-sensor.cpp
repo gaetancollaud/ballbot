@@ -143,8 +143,28 @@ void MPUSensor::computeAngles(double dtS) {
 	//	sumGx += gyroXRate;
 	//	sumGy += gyroYRate;
 
-	angleX = GYRO_TRUST * (angleX + gyroXRate) + GYRO_REVERSE_TRUST * accXangle;
-	angleY = GYRO_TRUST * (angleY + gyroYRate) + GYRO_REVERSE_TRUST * accYangle;
+	double finalX = GYRO_TRUST * (angleX + gyroXRate) + GYRO_REVERSE_TRUST * accXangle;
+	double finalY = GYRO_TRUST * (angleY + gyroYRate) + GYRO_REVERSE_TRUST * accYangle;
+
+	//BEGIN sliding average
+	slidingAverageX[slidingAverageIndex]=finalX;
+	slidingAverageY[slidingAverageIndex]=finalY;
+
+	double sumX = 0;
+	double sumY = 0;
+	for(int i=0; i<AVERAGE_SLIDE; i++) {
+		sumX += slidingAverageX[i];
+		sumY += slidingAverageY[i];
+	}
+
+	angleX = sumX*AVERAGE_SLIDE_REVERSE;
+	angleY = sumY*AVERAGE_SLIDE_REVERSE;
+
+	slidingAverageIndex++;
+	if(slidingAverageIndex>=AVERAGE_SLIDE) {
+		slidingAverageIndex = 0;
+	}
+	//END sliding average
 
 	MPU_DEBUG(String(dtS, 4));
 	MPU_DEBUG("\t\t");

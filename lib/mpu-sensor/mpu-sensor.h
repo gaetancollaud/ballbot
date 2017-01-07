@@ -21,6 +21,8 @@
 
 #define RESET_LOOP 100
 #define AVERAGE_LOOP 1
+#define AVERAGE_SLIDE 3
+#define AVERAGE_SLIDE_REVERSE 0.33333333
 // #define PI 3.14159265359
 // #define TWO_PI 6.28318530718
 
@@ -55,6 +57,9 @@ MPU6050 accelgyro;
 int16_t ax, ay, az, gx, gy, gz;
 int16_t zax, zay, zaz, zgx, zgy, zgz;
 
+int slidingAverageIndex;
+double slidingAverageX[AVERAGE_SLIDE];
+double slidingAverageY[AVERAGE_SLIDE];
 double angleX;
 double angleY;
 

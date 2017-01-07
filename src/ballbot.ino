@@ -7,7 +7,7 @@
 #include <position.h>
 
 structPid motorSpeedPid = {.p=0.1, .i=0.05, .d=0.0};
-structPid balancePid = {.p=100.0, .i=11.0, .d=0.0};
+structPid balancePid = {.p=180.0, .i=8.0, .d=0.0};
 // structPid balancePid = {.p=100.0, .i=20.0, .d=0.0};
 structPid positionPid = {.p=0.000, .i=0.0, .d=0.0};
 

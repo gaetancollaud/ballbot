@@ -50,21 +50,21 @@ void Balance::setTargetAngle(double x, double y){
 void Balance::reset(){
 	this->pidBalanceX.reset();
 	this->pidBalanceY.reset();
+	this->accDts = 0;
 }
 
 void Balance::loop(unsigned long nowMs, double dtS){
-	// if (nowMs >= this->nextTime) {
-	// this->nextTime = nowMs + BALANCE_DELAY_MS;
+	this->accDts += dtS;
+	if (nowMs >= this->nextTime) {
+		this->nextTime = nowMs + BALANCE_DELAY_MS;
 
-	if(this->enable) {
+		if(this->enable) {
 
-		pidBalanceX.loop(nowMs, dtS);
-		pidBalanceY.loop(nowMs, dtS);
-		//
-		// pidBalanceX.loop(nowMs, BALANCE_DELAY_S);
-		// pidBalanceY.loop(nowMs, BALANCE_DELAY_S);
+			pidBalanceX.loop(nowMs, accDts);
+			pidBalanceY.loop(nowMs, accDts);
 
-		this->motors->setSpeed(-this->outputBalanceX, this->outputBalanceY);
+			this->motors->setSpeed(-this->outputBalanceX, this->outputBalanceY);
+		}
+		this->accDts = 0;
 	}
-	// }
 }

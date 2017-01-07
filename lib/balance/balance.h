@@ -5,8 +5,8 @@
 #include <mpu-sensor.h>
 #include <pid.h>
 
+//166Hz
 #define BALANCE_DELAY_MS 10
-#define BALANCE_DELAY_S 0.010
 
 class Balance {
 public:
@@ -23,6 +23,7 @@ private:
 MPUSensor* sensor;
 Motors* motors;
 structPid* pidBalance;
+double accDts;
 
 bool enable;
 unsigned long nextTime;
