@@ -6,10 +6,12 @@
 #include <console.h>
 #include <position.h>
 
-structPid motorSpeedPid = {.p=0.1, .i=0.08, .d=0.0};
+structPid motorSpeedPid = {.p=0.1, .i=0.05, .d=0.0};
 structPid balancePid = {.p=100.0, .i=11.0, .d=0.0};
 // structPid balancePid = {.p=100.0, .i=20.0, .d=0.0};
 structPid positionPid = {.p=0.000, .i=0.0, .d=0.0};
+
+structPid* pidToDebug = &balancePid;
 
 RoReg* registerEncoder = &g_APinDescription[32].pPort->PIO_PDSR;
 structMotorConfig m1 = {2,3,32,30, registerEncoder, -PI_60};
@@ -20,7 +22,7 @@ MPUSensor sensor(53);
 Motors motors(m1, m2, m3, &motorSpeedPid);
 Balance balance(&sensor, &motors, &balancePid);
 Position position(&balance, &motors, &positionPid);
-Console console(&motors, &balance, &position, &balancePid, &positionPid);
+Console console(&motors, &balance, &position, pidToDebug, &positionPid);
 
 void setup(){
 	Serial.begin(115200);
@@ -67,11 +69,11 @@ void loop(){
 	if(now>nextPid) {
 		nextPid = now + 10000;
 		Serial.print("PID: ");
-		Serial.print(balancePid.p);
+		Serial.print(pidToDebug->p);
 		Serial.print("\t");
-		Serial.print(balancePid.i);
+		Serial.print(pidToDebug->i);
 		Serial.print("\t");
-		Serial.println(balancePid.d);
+		Serial.println(pidToDebug->d);
 	}
 
 }

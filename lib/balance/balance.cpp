@@ -53,15 +53,18 @@ void Balance::reset(){
 }
 
 void Balance::loop(unsigned long nowMs, double dtS){
-	if (nowMs >= this->nextTime) {
-		this->nextTime = nowMs + BALANCE_DELAY_MS;
+	// if (nowMs >= this->nextTime) {
+	// this->nextTime = nowMs + BALANCE_DELAY_MS;
 
-		if(this->enable) {
+	if(this->enable) {
 
-			pidBalanceX.loop(nowMs, BALANCE_DELAY_S);
-			pidBalanceY.loop(nowMs, BALANCE_DELAY_S);
+		pidBalanceX.loop(nowMs, dtS);
+		pidBalanceY.loop(nowMs, dtS);
+		//
+		// pidBalanceX.loop(nowMs, BALANCE_DELAY_S);
+		// pidBalanceY.loop(nowMs, BALANCE_DELAY_S);
 
-			this->motors->setSpeed(-this->outputBalanceX, this->outputBalanceY);
-		}
+		this->motors->setSpeed(-this->outputBalanceX, this->outputBalanceY);
 	}
+	// }
 }

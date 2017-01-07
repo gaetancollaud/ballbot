@@ -20,7 +20,7 @@
 #endif
 
 #define RESET_LOOP 100
-#define AVERAGE_LOOP 3
+#define AVERAGE_LOOP 1
 // #define PI 3.14159265359
 // #define TWO_PI 6.28318530718
 

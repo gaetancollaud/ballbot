@@ -35,32 +35,34 @@ void SingleMotor::setSpeed(double speed){
 }
 
 void SingleMotor::loop(unsigned long nowMs, double dtS) {
-	if (nowMs >= this->nextTime) {
-		this->nextTime = nowMs + REGULATION_DELAY_MS;
+	// if (nowMs >= this->nextTime) {
+	// this->nextTime = nowMs + REGULATION_DELAY_MS;
 
-		long ev = this->encoderValue;
-		this->currentSpeed = (ev-this->lastEncoderValue)/REGULATION_DELAY_S;
-		this->lastEncoderValue = ev;
+	long ev = this->encoderValue;
+	this->currentSpeed = (ev-this->lastEncoderValue)/dtS;
+	// this->currentSpeed = (ev-this->lastEncoderValue)/REGULATION_DELAY_S;
+	this->lastEncoderValue = ev;
 
-		long ec = this->encoderCount;
-		// long ecDiff = ec-this->lastEncoderCount;
-		this->lastEncoderCount = ec;
+	long ec = this->encoderCount;
+	// long ecDiff = ec-this->lastEncoderCount;
+	this->lastEncoderCount = ec;
 
-		this->pidSpeed.loop(nowMs, REGULATION_DELAY_S);
-		this->writeOutputSpeed();
+	this->pidSpeed.loop(nowMs, dtS);
+	// this->pidSpeed.loop(nowMs, REGULATION_DELAY_S);
+	this->writeOutputSpeed();
 
-		MOTOR_DEBUG("encoder: ");
-		MOTOR_DEBUG(ev);
-		MOTOR_DEBUG("count: ");
-		MOTOR_DEBUG(ecDiff);
-		MOTOR_DEBUG("current: ");
-		MOTOR_DEBUG(this->currentSpeed);
-		MOTOR_DEBUG("\ttarget: ");
-		MOTOR_DEBUG(this->targetSpeed);
-		MOTOR_DEBUG("\toutput: ");
-		MOTOR_DEBUG(this->outputSpeed);
-		MOTOR_DEBUGLN();
-	}
+	MOTOR_DEBUG("encoder: ");
+	MOTOR_DEBUG(ev);
+	MOTOR_DEBUG("count: ");
+	MOTOR_DEBUG(ecDiff);
+	MOTOR_DEBUG("current: ");
+	MOTOR_DEBUG(this->currentSpeed);
+	MOTOR_DEBUG("\ttarget: ");
+	MOTOR_DEBUG(this->targetSpeed);
+	MOTOR_DEBUG("\toutput: ");
+	MOTOR_DEBUG(this->outputSpeed);
+	MOTOR_DEBUGLN();
+	// }
 }
 
 void SingleMotor::updateEncoder(uint32_t mask){

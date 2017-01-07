@@ -49,6 +49,9 @@ void Console::analyse(){
 		this->balance->setMaxIntegral(this->getFloatValue());
 	}else if(inputString.startsWith("o")) {
 		this->balance->setMaxOutput(this->getFloatValue());
+	}else if(inputString.startsWith("v")) {
+		this->motors->setAngularSpeed(this->getFloatValue());
+		this->motors->setSpeed(0,0);
 	}else{
 		Serial.print("Error command unknown");
 	}
