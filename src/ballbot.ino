@@ -7,7 +7,7 @@
 #include <position.h>
 
 structPid motorSpeedPid = {.p=0.1, .i=0.05, .d=0.0};
-structPid balancePid = {.p=180.0, .i=8.0, .d=0.0};
+structPid balancePid = {.p=300.0, .i=14.0, .d=600.0};
 // structPid balancePid = {.p=100.0, .i=20.0, .d=0.0};
 structPid positionPid = {.p=0.000, .i=0.0, .d=0.0};
 
@@ -27,10 +27,10 @@ Console console(&motors, &balance, &position, pidToDebug, &positionPid);
 void setup(){
 	Serial.begin(115200);
 
+	motors.init();
 	sensor.init();
 	balance.init();
 	position.init();
-	motors.init();
 	console.init();
 
 	sensor.reset();
@@ -67,7 +67,7 @@ void loop(){
 		fpsCount = 0;
 	}
 	if(now>nextPid) {
-		nextPid = now + 10000;
+		nextPid = now + 5000;
 		Serial.print("PID: ");
 		Serial.print(pidToDebug->p);
 		Serial.print("\t");
