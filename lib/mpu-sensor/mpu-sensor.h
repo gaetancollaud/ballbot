@@ -3,9 +3,21 @@
 
 #include "Arduino.h"
 
-#include <Wire.h>
+#include <I2Cdev.h>
 #include <MPU6050.h>
+// #include <MPU6050_6Axis_MotionApps20.h>
 
+#if (I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE) && !defined (PARTICLE)
+    #include "Wire.h"
+#endif
+
+
+// uncomment "OUTPUT_READABLE_YAWPITCHROLL" if you want to see the yaw/
+// pitch/roll angles (in degrees) calculated from the quaternions coming
+// from the FIFO. Note this also requires gravity vector calculations.
+// Also note that yaw/pitch/roll angles suffer from gimbal lock (for
+// more info, see: http://en.wikipedia.org/wiki/Gimbal_lock)
+#define OUTPUT_READABLE_YAWPITCHROLL
 
 // #define DEBUG_MPU
 
@@ -19,26 +31,6 @@
 	#define MPU_DEBUGVAL(...)
 #endif
 
-#define RESET_LOOP 100
-#define AVERAGE_LOOP 1
-#define AVERAGE_SLIDE 2
-#define AVERAGE_SLIDE_REVERSE 0.5
-// #define PI 3.14159265359
-// #define TWO_PI 6.28318530718
-
-#define GYRO_TRUST 0.995
-#define GYRO_REVERSE_TRUST 0.005
-
-
-//250degr = 4.363323129992093 rad
-//2^15/250degr //sensitivity +/- 250degr for 16bits
-//2^15/4.363323129992093 = 0.00013315805
-#define GYRO_RATIO_250 0.00013315805
-#define GYRO_RATIO_500 0.0002663161
-#define GYRO_RATIO GYRO_RATIO_500
-
-//70% of 2^15
-#define ALLERT_TRESHOLD 22937
 
 class MPUSensor {
 public:
@@ -54,19 +46,19 @@ private:
 int pinCS;
 
 MPU6050 accelgyro;
-int16_t ax, ay, az, gx, gy, gz;
-int16_t zax, zay, zaz, zgx, zgy, zgz;
+// int16_t ax, ay, az, gx, gy, gz;
+// int16_t zax, zay, zaz, zgx, zgy, zgz;
 
-int slidingAverageIndex;
-double slidingAverageX[AVERAGE_SLIDE];
-double slidingAverageY[AVERAGE_SLIDE];
+// int slidingAverageIndex;
+// double slidingAverageX[AVERAGE_SLIDE];
+// double slidingAverageY[AVERAGE_SLIDE];
 double angleX;
 double angleY;
 
-void refreshSensors();
-void computeAngles(double);
-double constraintAngle(double*);
-double toReadableDegr(double);
+// void refreshSensors();
+// void computeAngles(double);
+// double constraintAngle(double*);
+// double toReadableDegr(double);
 
 };
 

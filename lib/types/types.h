@@ -19,7 +19,7 @@ typedef struct {
 	int pinRight;
 	int rotaryA;
 	int rotaryB;
-	RoReg* registerEncoder;
+	// RoReg* registerEncoder;
 	double angleRad;
 } structMotorConfig;
 

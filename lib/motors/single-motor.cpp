@@ -5,8 +5,8 @@ SingleMotor::SingleMotor(structMotorConfig& config, structPid* pidValue)
 	this->encoderValue = 0;
 	this->lastEncoderValue=0;
 	this->targetSpeed = 0;
-	this->maskRotaryA = g_APinDescription[config.rotaryA].ulPin;
-	this->maskRotaryB = g_APinDescription[config.rotaryB].ulPin;
+	// this->maskRotaryA = g_APinDescription[config.rotaryA].ulPin;
+	// this->maskRotaryB = g_APinDescription[config.rotaryB].ulPin;
 
 	pidSpeed.setLimitOutput(MAX_DC_MOTOR_VALUE);
 }
