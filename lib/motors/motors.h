@@ -8,46 +8,50 @@
 // #define DEBUG_MOTORS
 
 #ifdef DEBUG_MOTORS
-	#define MOTORS_DEBUG(...) Serial.print(__VA_ARGS__);
-	#define MOTORS_DEBUGLN(...) Serial.println(__VA_ARGS__);
-	#define MOTORS_DEBUGVAL(...) Serial.print(__VA_ARGS__); Serial.print("\t");
+#define MOTORS_DEBUG(...) Serial.print(__VA_ARGS__);
+#define MOTORS_DEBUGLN(...) Serial.println(__VA_ARGS__);
+#define MOTORS_DEBUGVAL(...)   \
+	Serial.print(__VA_ARGS__); \
+	Serial.print("\t");
 #else
-	#define MOTORS_DEBUG(...)
-	#define MOTORS_DEBUGLN(...)
-	#define MOTORS_DEBUGVAL(...)
+#define MOTORS_DEBUG(...)
+#define MOTORS_DEBUGLN(...)
+#define MOTORS_DEBUGVAL(...)
 #endif
 
-
-class Motors {
+class Motors
+{
 public:
-Motors(structMotorConfig& c1, structMotorConfig& c2, structMotorConfig& c3, structPid* pid);
-void init();
-void reset();
-void loop(unsigned long, double);
+	Motors(structMotorConfig &c1, structMotorConfig &c2, structMotorConfig &c3, structPid *pid);
+	void init();
+	void reset();
+	void loop(unsigned long, double);
 
-void updateEncoderMotor1(uint32_t value);
-void updateEncoderMotor2(uint32_t value);
-void updateEncoderMotor3(uint32_t value);
+	void updateEncoderMotor1A();
+	void updateEncoderMotor1B();
+	void updateEncoderMotor2A();
+	void updateEncoderMotor2B();
+	void updateEncoderMotor3A();
+	void updateEncoderMotor3B();
 
-void setSpeed(double x, double y);
-void setAngularSpeed(double s);
+	void setSpeed(double x, double y);
+	void setAngularSpeed(double s);
 
-double* getPositionXPtr();
-double* getPositionYPtr();
+	double *getPositionXPtr();
+	double *getPositionYPtr();
 
 private:
-SingleMotor m1;
-SingleMotor m2;
-SingleMotor m3;
-SingleMotor* motors[3];
-double holoAngle[3];
-double angularSpeed;
+	SingleMotor m1;
+	SingleMotor m2;
+	SingleMotor m3;
+	SingleMotor *motors[3];
+	double holoAngle[3];
+	double angularSpeed;
 
-double speedX;
-double speedY;
-double positionX;
-double positionY;
-
+	double speedX;
+	double speedY;
+	double positionX;
+	double positionY;
 };
 
 #endif

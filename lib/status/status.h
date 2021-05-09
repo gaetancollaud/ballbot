@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define STATUS_FACTOR 100
+#define STATUS_FACTOR 10000
 
 class Status
 {

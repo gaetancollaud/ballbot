@@ -17,10 +17,10 @@ void Status::loop(unsigned long nowMs, double dtS)
     if (nowMs > nextFps)
     {
         nextFps = nowMs + 1000;
-        // Serial.print("FPS: ");
-        // Serial.print(fpsCount);
-        // Serial.print("\tSensor: ");
-        // Serial.println(sensorCount);
+        Serial.print("FPS: ");
+        Serial.print(fpsCount);
+        Serial.print("\tSensor: ");
+        Serial.println(sensorCount);
         fpsCount = 0;
         sensorCount = 0;
     }

@@ -1,24 +1,24 @@
 #include "single-motor.h"
 
-SingleMotor::SingleMotor(structMotorConfig& config, structPid* pidValue)
-	: config(config),       pidSpeed(&currentSpeed, &outputSpeed, &targetSpeed, pidValue){
+SingleMotor::SingleMotor(structMotorConfig &config, structPid *pidValue)
+	: config(config), pidSpeed(&currentSpeed, &outputSpeed, &targetSpeed, pidValue)
+{
 	this->encoderValue = 0;
-	this->lastEncoderValue=0;
+	this->lastEncoderValue = 0;
 	this->targetSpeed = 0;
-	// this->maskRotaryA = g_APinDescription[config.rotaryA].ulPin;
-	// this->maskRotaryB = g_APinDescription[config.rotaryB].ulPin;
 
 	pidSpeed.setLimitOutput(MAX_DC_MOTOR_VALUE);
 }
 
-void SingleMotor::init(){
+void SingleMotor::init()
+{
 
 	pinMode(this->config.pinLeft, OUTPUT);
 	pinMode(this->config.pinRight, OUTPUT);
 
 	//!\ Hardware pullup of 10k must be present, Arduino DUE pullup are too big
-	pinMode(this->config.rotaryA, INPUT);
-	pinMode(this->config.rotaryB, INPUT);
+	pinMode(this->config.rotaryA, INPUT_PULLUP);
+	pinMode(this->config.rotaryB, INPUT_PULLUP);
 
 	analogWrite(this->config.pinLeft, LOW);
 	analogWrite(this->config.pinRight, LOW);
@@ -26,80 +26,126 @@ void SingleMotor::init(){
 	MOTOR_DEBUGLN("Motor initilized");
 }
 
-void SingleMotor::reset(){
+void SingleMotor::reset()
+{
 	this->pidSpeed.reset();
 }
 
-void SingleMotor::setSpeed(double speed){
-	this->targetSpeed = map(speed, -100, 100, -1300, 1300);
+void SingleMotor::setSpeed(double speed)
+{
+	this->targetSpeed = map(speed, -100, 100, -1000, 1000);
+	// this->targetSpeed = constrain(speed, -100, 100);
 }
 
-void SingleMotor::loop(unsigned long nowMs, double dtS) {
-	// if (nowMs >= this->nextTime) {
-	// this->nextTime = nowMs + REGULATION_DELAY_MS;
+void SingleMotor::loop(unsigned long nowMs, double dtS)
+{
+	if (nowMs >= this->nextTime)
+	{
+		this->nextTime = nowMs + REGULATION_INTERVAL_MS;
 
-	long ev = this->encoderValue;
-	this->currentSpeed = (ev-this->lastEncoderValue)/dtS;
-	// this->currentSpeed = (ev-this->lastEncoderValue)/REGULATION_DELAY_S;
-	this->lastEncoderValue = ev;
+		long ev = this->encoderValue;
+		// this->currentSpeed = (ev - this->lastEncoderValue) / dtS;
+		this->currentSpeed = (ev - this->lastEncoderValue) / REGULATION_INTERVAL_S;
+		this->lastEncoderValue = ev;
 
-	long ec = this->encoderCount;
-	// long ecDiff = ec-this->lastEncoderCount;
-	this->lastEncoderCount = ec;
+		long ec = this->encoderCount;
+		long ecDiff = ec - this->lastEncoderCount;
+		this->lastEncoderCount = ec;
 
-	this->pidSpeed.loop(nowMs, dtS);
-	// this->pidSpeed.loop(nowMs, REGULATION_DELAY_S);
-	this->writeOutputSpeed();
+		// this->pidSpeed.loop(nowMs, dtS);
+		this->pidSpeed.loop(nowMs, REGULATION_INTERVAL_S);
 
-	MOTOR_DEBUG("encoder: ");
-	MOTOR_DEBUG(ev);
-	MOTOR_DEBUG("count: ");
-	MOTOR_DEBUG(ecDiff);
-	MOTOR_DEBUG("current: ");
-	MOTOR_DEBUG(this->currentSpeed);
-	MOTOR_DEBUG("\ttarget: ");
-	MOTOR_DEBUG(this->targetSpeed);
-	MOTOR_DEBUG("\toutput: ");
-	MOTOR_DEBUG(this->outputSpeed);
-	MOTOR_DEBUGLN();
-	// }
+		this->writeOutputSpeed();
+
+		char buffer[100];
+		sprintf(buffer, "encoder: %d\tcount: %d\tcurrent: %5.0f\ttarget: %5.0f\toutput: %3.2f", ev, ecDiff, this->currentSpeed, this->targetSpeed, this->outputSpeed);
+		MOTOR_DEBUGLN(buffer);
+
+		// MOTOR_DEBUG("encoder: ");
+		// MOTOR_DEBUG(ev);
+		// MOTOR_DEBUG("\tcount: ");
+		// MOTOR_DEBUG(ecDiff);
+		// MOTOR_DEBUG("\tcurrent: ");
+		// MOTOR_DEBUG(this->currentSpeed);
+		// MOTOR_DEBUG("\ttarget: ");
+		// MOTOR_DEBUG(this->targetSpeed);
+		// MOTOR_DEBUG("\toutput: ");
+		// MOTOR_DEBUG(this->outputSpeed);
+		// MOTOR_DEBUGLN();
+	}
 }
 
-void SingleMotor::updateEncoder(uint32_t mask){
+void SingleMotor::updateEncoderA()
+{
 	encoderCount++;
 
-	int MSB = !!(mask & maskRotaryA); //MSB = most significant bit
-	int LSB = !!(mask & maskRotaryB); //LSB = least significant bit
-
-	int encoded = (MSB << 1) |LSB; //converting the 2 pin value to single number
-	int sum  = (lastEncoded << 2) | encoded;//adding it to the previous encoded value
-
-	if(sum == 0b1101 || sum == 0b0100 || sum == 0b0010 || sum == 0b1011) encoderValue++;
-	if(sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000) encoderValue--;
-
-	lastEncoded = encoded; //store this value for next time
-
-	// if (digitalReadDirect(rotaryA) == digitalReadDirect(rotaryB)) {
-	//   encoderValue++;
-	// } else {
-	//   encoderValue--;
-	// }
+	if (digitalRead(config.rotaryA) == digitalRead(config.rotaryB))
+	{
+		encoderValue++;
+	}
+	else
+	{
+		encoderValue--;
+	}
 }
 
-void SingleMotor::writeOutputSpeed(){
+void SingleMotor::updateEncoderB()
+{
+	encoderCount++;
+
+	if (digitalRead(config.rotaryA) == digitalRead(config.rotaryB))
+	{
+		encoderValue--;
+	}
+	else
+	{
+		encoderValue++;
+	}
+}
+
+void SingleMotor::writeOutputSpeed()
+{
 	int speed = this->outputSpeed;
-	int16_t l=0, r=0;
-	if(speed>=0) {
-		if(speed!=0) {
-			speed += MOTOR_MIN_SPEED;
-		}
+	int16_t l = 0, r = 0;
+
+	if (speed == 0)
+	{
+		r = LOW;
+		l = LOW;
+	}
+	else if (speed > 0)
+	{
+		speed += MOTOR_MIN_SPEED;
 		r = speed;
 		l = LOW;
-	}else{
+	}
+	else
+	{
 		speed -= MOTOR_MIN_SPEED;
-		l = -speed;
 		r = LOW;
+		l = -speed;
 	}
 	analogWrite(this->config.pinLeft, l);
 	analogWrite(this->config.pinRight, r);
+}
+
+void SingleMotor::motorTest(unsigned long nowMs, double dtS)
+{
+	int state = (nowMs / 1000) % 4;
+
+	switch (state)
+	{
+	case 0:
+		this->setSpeed(0);
+		break;
+	case 1:
+		this->setSpeed(100);
+		break;
+	case 2:
+		this->setSpeed(0);
+		break;
+	case 3:
+		this->setSpeed(-100);
+		break;
+	}
 }
