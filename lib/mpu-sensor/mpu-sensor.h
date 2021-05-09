@@ -3,14 +3,10 @@
 
 #include "Arduino.h"
 
-#include <I2Cdev.h>
+#include <Wire.h>
+// #include <I2Cdev.h>
 #include <MPU6050.h>
 // #include <MPU6050_6Axis_MotionApps20.h>
-
-#if (I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE) && !defined (PARTICLE)
-    #include "Wire.h"
-#endif
-
 
 // uncomment "OUTPUT_READABLE_YAWPITCHROLL" if you want to see the yaw/
 // pitch/roll angles (in degrees) calculated from the quaternions coming
@@ -19,47 +15,51 @@
 // more info, see: http://en.wikipedia.org/wiki/Gimbal_lock)
 #define OUTPUT_READABLE_YAWPITCHROLL
 
-// #define DEBUG_MPU
+#define DEBUG_MPU
 
 #ifdef DEBUG_MPU
-	#define MPU_DEBUG(...) Serial.print(__VA_ARGS__);
-	#define MPU_DEBUGLN(...) Serial.println(__VA_ARGS__);
-	#define MPU_DEBUGVAL(...) Serial.print(__VA_ARGS__); Serial.print("\t");
+#define MPU_DEBUG(...) Serial.print(__VA_ARGS__);
+#define MPU_DEBUGLN(...) Serial.println(__VA_ARGS__);
+#define MPU_DEBUGVAL(...)      \
+	Serial.print(__VA_ARGS__); \
+	Serial.print("\t");
 #else
-	#define MPU_DEBUG(...)
-	#define MPU_DEBUGLN(...)
-	#define MPU_DEBUGVAL(...)
+#define MPU_DEBUG(...)
+#define MPU_DEBUGLN(...)
+#define MPU_DEBUGVAL(...)
 #endif
 
-
-class MPUSensor {
+class MPUSensor
+{
 public:
-MPUSensor(int);
-void init();
-void reset();
-void loop(unsigned long, double);
+	MPUSensor(int, int);
+	void init();
+	void reset();
+	void loop(unsigned long, double);
 
-double* getAngleXptr();
-double* getAngleYptr();
+	double *getAngleXptr();
+	double *getAngleYptr();
+
+	void detectDevices();
 
 private:
-int pinCS;
+	int pinCS;
+	int pinInterupt;
 
-MPU6050 accelgyro;
-// int16_t ax, ay, az, gx, gy, gz;
-// int16_t zax, zay, zaz, zgx, zgy, zgz;
+	MPU6050 accelgyro;
+	// int16_t ax, ay, az, gx, gy, gz;
+	// int16_t zax, zay, zaz, zgx, zgy, zgz;
 
-// int slidingAverageIndex;
-// double slidingAverageX[AVERAGE_SLIDE];
-// double slidingAverageY[AVERAGE_SLIDE];
-double angleX;
-double angleY;
+	// int slidingAverageIndex;
+	// double slidingAverageX[AVERAGE_SLIDE];
+	// double slidingAverageY[AVERAGE_SLIDE];
+	double angleX;
+	double angleY;
 
-// void refreshSensors();
-// void computeAngles(double);
-// double constraintAngle(double*);
-// double toReadableDegr(double);
-
+	void refreshSensors();
+	// void computeAngles(double);
+	// double constraintAngle(double*);
+	// double toReadableDegr(double);
 };
 
 #endif
