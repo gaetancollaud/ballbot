@@ -14,6 +14,8 @@ public:
 
     void loop(unsigned long, double);
 
+    void increaseSensorCount();
+
 private:
     int ledPin;
     bool previousState;
@@ -21,6 +23,7 @@ private:
 
     unsigned long nextFps = 0;
     int fpsCount = 0;
+    int sensorCount = 0;
 };
 
 #endif

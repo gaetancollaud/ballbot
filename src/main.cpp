@@ -1,10 +1,16 @@
 #include <Arduino.h>
+
 #include <mpu-sensor.h>
 #include <console.h>
 #include <status.h>
 
-MPUSensor sensor(22, 23);
 Status status(13);
+MPUSensor sensor(&status, 23);
+
+
+void dmpDataReady() {
+  sensor.dmpDataReady();
+}
 
 void setup()
 {
@@ -12,7 +18,7 @@ void setup()
   Serial.begin(115200);
   delay(1000); // let time to connect
 
-  sensor.init();
+  sensor.init(&dmpDataReady);
   status.init();
 
   sensor.reset();
