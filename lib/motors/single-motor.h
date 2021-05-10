@@ -18,10 +18,15 @@
 #define MOTOR_DEBUGVAL(...)    \
 	Serial.print(__VA_ARGS__); \
 	Serial.print("\t");
+#define MOTOR_DEBUGF(...) \
+    char buffer[100]; \
+	sprintf(buffer, __VA_ARGS__); \
+	Serial.print(buffer);
 #else
 #define MOTOR_DEBUG(...)
 #define MOTOR_DEBUGLN(...)
 #define MOTOR_DEBUGVAL(...)
+#define MOTOR_DEBUGF(...)
 #endif
 
 

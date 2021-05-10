@@ -57,9 +57,9 @@ void SingleMotor::loop(unsigned long nowMs, double dtS)
 
 		this->writeOutputSpeed();
 
-		char buffer[100];
-		sprintf(buffer, "encoder: %d\tcount: %d\tcurrent: %5.0f\ttarget: %5.0f\toutput: %3.2f", ev, ecDiff, this->currentSpeed, this->targetSpeed, this->outputSpeed);
-		MOTOR_DEBUGLN(buffer);
+		MOTOR_DEBUGF("encoder: %d\tcount: %d\tcurrent: %5.0f\ttarget: %5.0f\toutput: %3.2f", ev, ecDiff, this->currentSpeed, this->targetSpeed, this->outputSpeed)
+		MOTOR_DEBUGLN()
+		
 
 		// MOTOR_DEBUG("encoder: ");
 		// MOTOR_DEBUG(ev);
