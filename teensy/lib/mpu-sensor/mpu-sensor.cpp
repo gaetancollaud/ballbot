@@ -2,24 +2,13 @@
 
 #include <MPU6050_6Axis_MotionApps20.h>
 
-MPUSensor::MPUSensor(Status* status, int pinInterupt) : status(status), pinInterupt(pinInterupt)
+MPUSensor::MPUSensor(int pinInterupt) : pinInterupt(pinInterupt)
 {
-	// this->zax = 0;
-	// this->zay = 0;
-	// this->zaz = 0;
-	// this->zgx = 0;
-	// this->zgy = 0;
-	// this->zgz = 0;
 	this->accelgyro = new MPU6050();
 }
 
 void MPUSensor::init(mpuInterrupFunction func)
 {
-	// pinMode(pinCS, OUTPUT);
-	// digitalWrite(pinCS, LOW);
-	// delay(100);
-	// digitalWrite(pinCS, HIGH);
-
 	pinMode(this->pinInterupt, INPUT);
 
 	//TODO try to speed up i2c to 400khz
@@ -182,8 +171,6 @@ void MPUSensor::refreshSensors()
 			// track FIFO count here in case there is > 1 packet available
 			// (this lets us immediately read more without waiting for an interrupt)
 			fifoCount -= packetSize;
-
-			status->increaseSensorCount();
 
 #ifdef OUTPUT_READABLE_QUATERNION
 			// display quaternion values in easy matrix form: w x y z

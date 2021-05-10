@@ -10,7 +10,7 @@
 #define REGULATION_INTERVAL_S 0.005
 #define MOTOR_MIN_SPEED 0
 
-#define DEBUG_MOTOR
+// #define DEBUG_MOTOR
 
 #ifdef DEBUG_MOTOR
 #define MOTOR_DEBUG(...) Serial.print(__VA_ARGS__);

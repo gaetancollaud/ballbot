@@ -1,6 +1,6 @@
 #include "status.h"
 
-Status::Status(int ledPin) : ledPin(ledPin)
+Status::Status(Console *console, int ledPin) : console(console), ledPin(ledPin)
 {
 }
 
@@ -17,12 +17,10 @@ void Status::loop(unsigned long nowMs, double dtS)
     if (nowMs > nextFps)
     {
         nextFps = nowMs + 1000;
-        Serial.print("FPS: ");
-        Serial.print(fpsCount);
-        Serial.print("\tSensor: ");
-        Serial.println(sensorCount);
+        // Serial.print("FPS: ");
+        // Serial.println(fpsCount);
+        this->console->sendItem("fps", fpsCount);
         fpsCount = 0;
-        sensorCount = 0;
     }
 
     this->counter++;
@@ -32,8 +30,4 @@ void Status::loop(unsigned long nowMs, double dtS)
         this->counter = 0;
         digitalWrite(this->ledPin, this->previousState ? HIGH : LOW);
     }
-}
-
-void Status::increaseSensorCount(){
-    this->sensorCount++;
 }

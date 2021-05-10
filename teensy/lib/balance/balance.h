@@ -8,34 +8,34 @@
 //166Hz
 #define BALANCE_DELAY_MS 10
 
-class Balance {
+class Balance
+{
 public:
-Balance(MPUSensor* sensor, Motors* motors, structPid* pidBalance);
-void init();
-void reset();
-void loop(unsigned long, double);
-void toggleEnable();
-void setMaxIntegral(double v);
-void setMaxOutput(double v);
-void setTargetAngle(double x, double y);
+    Balance(MPUSensor *sensor, Motors *motors, structPid *pidBalance);
+    void init();
+    void reset();
+    void loop(unsigned long, double);
+    void toggleEnable();
+    void setMaxIntegral(double v);
+    void setMaxOutput(double v);
+    void setTargetAngle(double x, double y);
 
 private:
-MPUSensor* sensor;
-Motors* motors;
-structPid* pidBalance;
-double accDts;
+    MPUSensor *sensor;
+    Motors *motors;
+    structPid *pidBalance;
+    double accDts;
 
-bool enable;
-unsigned long nextTime;
+    bool enable;
+    unsigned long nextTime;
 
-PID pidBalanceX;
-PID pidBalanceY;
+    PID pidBalanceX;
+    PID pidBalanceY;
 
-double outputBalanceX;
-double outputBalanceY;
-double targetBalanceX;
-double targetBalanceY;
-
+    double outputBalanceX;
+    double outputBalanceY;
+    double targetBalanceX;
+    double targetBalanceY;
 };
 
 #endif

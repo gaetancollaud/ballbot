@@ -3,7 +3,6 @@
 
 #include "Arduino.h"
 
-#include <status.h>
 #include <I2Cdev.h>
 // #include <MPU6050.h>
 #include <Wire.h>
@@ -16,7 +15,7 @@
 // more info, see: http://en.wikipedia.org/wiki/Gimbal_lock)
 // #define OUTPUT_READABLE_YAWPITCHROLL
 
-#define OUTPUT_TEAPOT
+// #define OUTPUT_TEAPOT
 
 #define DEBUG_MPU
 
@@ -39,7 +38,7 @@ class MPU6050;
 class MPUSensor
 {
 public:
-	MPUSensor(Status*, int);
+	MPUSensor(int);
 	void init(mpuInterrupFunction func);
 	void reset();
 	void loop(unsigned long, double);
@@ -53,7 +52,6 @@ public:
 private:
 	int pinInterupt;
 
-	Status* status;
 	MPU6050 *accelgyro;
 	// int16_t ax, ay, az, gx, gy, gz;
 	// int16_t zax, zay, zaz, zgx, zgy, zgz;

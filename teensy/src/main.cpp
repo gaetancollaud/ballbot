@@ -9,14 +9,15 @@ void initEncoderInterupt();
 
 structPid motorSpeedPid = {.p = 200, .i = 5, .d = 0};
 
-structMotorConfig m1 = {10, 11, 2, 3, -PI_60};
-structMotorConfig m2 = {10, 11, 4, 6, PI_60};
-structMotorConfig m3 = {10, 11, 7, 8, PI_180};
+structMotorConfig m1 = {12, 11, 2, 3, -PI_60};
+structMotorConfig m2 = {12, 11, 4, 6, PI_60};
+structMotorConfig m3 = {12, 11, 7, 8, PI_180};
 
-Status status(13);
-MPUSensor sensor(&status, 23);
 // Motors motors(m1, m2, m3, &motorSpeedPid);
+MPUSensor sensor(23);
 SingleMotor motor1(m1, &motorSpeedPid);
+Console console(0, 0, 0, 0, 0);
+Status status(&console, 13);
 
 void dmpDataReady()
 {
@@ -27,9 +28,10 @@ void setup()
 {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  delay(1000);// wait for terminal to connect
+  delay(1000); // wait for terminal to connect
 
-  // sensor.init(&dmpDataReady);
+  sensor.init(&dmpDataReady);
+  console.init();
   motor1.init();
   status.init();
 
@@ -58,26 +60,28 @@ void loop()
 
   // sensor.detectDevices();
 
-  // sensor.loop(now, dtS);
+  sensor.loop(now, dtS);
   motor1.loop(now, dtS);
   status.loop(now, dtS);
+  console.loop(now, dtS);
 
   // position.loop(now, dtS);
   // balance.loop(now, dtS);
   // motors.loop(now, dtS);
   // console.loop(now, dtS);
 
-
   motor1.motorTest(now, dtS); //TODO remove
 }
 
-void motor1HandlerA() {
+void motor1HandlerA()
+{
   motor1.updateEncoderA();
-	// motors.updateEncoderMotor1();
+  // motors.updateEncoderMotor1();
 }
-void motor1HandlerB() {
+void motor1HandlerB()
+{
   motor1.updateEncoderB();
-	// motors.updateEncoderMotor1();
+  // motors.updateEncoderMotor1();
 }
 // void motor2Handler() {
 // 	motors.updateEncoderMotor2();
@@ -86,11 +90,12 @@ void motor1HandlerB() {
 // 	motors.updateEncoderMotor3();
 // }
 
-void initEncoderInterupt() {
-	attachInterrupt(m1.rotaryA, motor1HandlerA, CHANGE);
-	// attachInterrupt(m1.rotaryB, motor1HandlerB, CHANGE);
-	// attachInterrupt(m2.rotaryA, motor2Handler, CHANGE);
-	// attachInterrupt(m2.rotaryB, motor2Handler, CHANGE);
-	// attachInterrupt(m3.rotaryA, motor3Handler, CHANGE);
-	// attachInterrupt(m3.rotaryB, motor3Handler, CHANGE);
+void initEncoderInterupt()
+{
+  attachInterrupt(m1.rotaryA, motor1HandlerA, CHANGE);
+  // attachInterrupt(m1.rotaryB, motor1HandlerB, CHANGE);
+  // attachInterrupt(m2.rotaryA, motor2Handler, CHANGE);
+  // attachInterrupt(m2.rotaryB, motor2Handler, CHANGE);
+  // attachInterrupt(m3.rotaryA, motor3Handler, CHANGE);
+  // attachInterrupt(m3.rotaryB, motor3Handler, CHANGE);
 }
