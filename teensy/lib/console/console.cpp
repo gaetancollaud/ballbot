@@ -1,6 +1,6 @@
 #include "console.h"
 
-Console::Console(Motors *motors, Balance *balance, Position *position, structPid *balancePid, structPid *positionPid) : motors(motors), balance(balance), position(position), balancePid(balancePid), positionPid(positionPid)
+Console::Console(Motors *motors, Balance *balance, Position *position, structPid *balancePid, structPid *positionPid, structPid *motorPid) : motors(motors), balance(balance), position(position), balancePid(balancePid), positionPid(positionPid), motorPid(motorPid)
 {
 }
 
@@ -39,7 +39,7 @@ void Console::loop(unsigned long, double)
 
 void Console::sendItem(String item, String value)
 {
-	Serial.println("Sending " + item + "=" + value);
+	Serial.println("i sending " + item + "=" + value);
 
 	CONSOLE_SERIAL.print("s ");
 	CONSOLE_SERIAL.print(item);
@@ -79,8 +79,7 @@ void Console::analyse()
 		{
 			String item = itemAndValue.substring(0, index);
 			String value = itemAndValue.substring(index + 1);
-			Serial.println("TODO handle command item=" + item + " value=" + value);
-			// this->callback(item, value);
+			this->handleValue(item, value);
 		}
 	}
 	else
@@ -89,42 +88,75 @@ void Console::analyse()
 	}
 	// clear the string:
 	inputString = "";
+}
 
-	// if (inputString.startsWith("p"))
-	// {
-	// 	this->balancePid->p = this->getFloatValue();
-	// }
-	// else if (inputString.startsWith("i"))
-	// {
-	// 	this->balancePid->i = this->getFloatValue();
-	// }
-	// else if (inputString.startsWith("d"))
-	// {
-	// 	this->balancePid->d = this->getFloatValue();
-	// }
-	// else if (inputString.startsWith("a"))
-	// {
-	// 	this->positionPid->p = this->getFloatValue();
-	// }
-	// else if (inputString.startsWith("s"))
-	// {
-	// 	this->positionPid->i = this->getFloatValue();
-	// }
-	// else if (inputString.startsWith("d"))
-	// {
-	// 	this->positionPid->d = this->getFloatValue();
-	// }
-	// else if (inputString.startsWith("r"))
-	// {
-	// 	this->motors->reset();
-	// 	this->balance->reset();
-	// 	this->position->reset();
-	// }
-	// else if (inputString.startsWith("e"))
-	// {
-	// 	this->balance->toggleEnable();
-	// 	this->position->toggleEnable();
-	// }
+void Console::handleValue(String item, String value)
+{
+
+	Serial.println("i received item=" + item + ", value=" + value);
+	if (item.equals("reset"))
+	{
+		this->motors->reset();
+		this->balance->reset();
+		this->position->reset();
+	}
+	else if (item.equalsIgnoreCase("balanceP"))
+	{
+		this->balancePid->p = value.toFloat();
+	}
+	else if (item.equalsIgnoreCase("balanceI"))
+	{
+		this->balancePid->i = value.toFloat();
+	}
+	else if (item.equalsIgnoreCase("balanceD"))
+	{
+		this->balancePid->d = value.toFloat();
+	}
+	else if (item.equalsIgnoreCase("positionP"))
+	{
+		this->positionPid->p = value.toFloat();
+	}
+	else if (item.equalsIgnoreCase("positionI"))
+	{
+		this->positionPid->i = value.toFloat();
+	}
+	else if (item.equalsIgnoreCase("positionD"))
+	{
+		this->positionPid->d = value.toFloat();
+	}
+	else if (item.equalsIgnoreCase("motorP"))
+	{
+		this->motorPid->p = value.toFloat();
+	}
+	else if (item.equalsIgnoreCase("motorI"))
+	{
+		this->motorPid->i = value.toFloat();
+	}
+	else if (item.equalsIgnoreCase("motorD"))
+	{
+		this->motorPid->d = value.toFloat();
+	}
+	else if (item.equals("test"))
+	{
+		Serial.println("test is working, its value is " + value);
+	}
+	else if (item.equalsIgnoreCase("angularVelocity"))
+	{
+		this->motors->setAngularSpeed(value.toFloat());
+		this->motors->setSpeed(0, 0);
+	}
+	else if (item.equals("enabled"))
+	{
+		this->balance->toggleEnable();
+		this->position->toggleEnable();
+	}
+	else
+	{
+		Serial.println("e Unknown item " + item + " and value " + value);
+	}
+
+
+
 	// else if (inputString.startsWith("l"))
 	// {
 	// 	this->balance->setMaxIntegral(this->getFloatValue());
@@ -133,20 +165,4 @@ void Console::analyse()
 	// {
 	// 	this->balance->setMaxOutput(this->getFloatValue());
 	// }
-	// else if (inputString.startsWith("v"))
-	// {
-	// 	this->motors->setAngularSpeed(this->getFloatValue());
-	// 	this->motors->setSpeed(0, 0);
-	// }
-	// else
-	// {
-	// 	Serial.print("Error command unknown");
-	// }
-	// // clear the string:
-	// inputString = "";
-}
-
-float Console::getFloatValue()
-{
-	return inputString.substring(1).toFloat();
 }

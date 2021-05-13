@@ -1,5 +1,5 @@
-#ifndef _MPU_SENSOR_H
-#define _MPU_SENSOR_H
+#ifndef _MPU_SENSOR_DMP_H
+#define _MPU_SENSOR_DMP_H
 
 #include "Arduino.h"
 
@@ -8,14 +8,19 @@
 #include <Wire.h>
 #include <helper_3dmath.h>
 
-// uncomment "OUTPUT_READABLE_YAWPITCHROLL" if you want to see the yaw/
-// pitch/roll angles (in degrees) calculated from the quaternions coming
-// from the FIFO. Note this also requires gravity vector calculations.
-// Also note that yaw/pitch/roll angles suffer from gimbal lock (for
-// more info, see: http://en.wikipedia.org/wiki/Gimbal_lock)
-// #define OUTPUT_READABLE_YAWPITCHROLL
+// #define MODE_DMP
 
-// #define OUTPUT_TEAPOT
+#ifndef MODE_DMP
+#define GYRO_TRUST 0.999
+#define GYRO_REVERSE_TRUST (1.0 - GYRO_TRUST)
+#define GYRO_RATIO_250 0.00013315805
+#define GYRO_RATIO_500 0.0002663161
+#define GYRO_RATIO GYRO_RATIO_500
+#define ALLERT_TRESHOLD 22937
+#define RESET_LOOP 100
+#define AVERAGE_SLIDE 2
+#define AVERAGE_SLIDE_REVERSE (1.0 / AVERAGE_SLIDE)
+#endif
 
 #define DEBUG_MPU
 
@@ -25,10 +30,15 @@
 #define MPU_DEBUGVAL(...)      \
 	Serial.print(__VA_ARGS__); \
 	Serial.print("\t");
+#define MPU_DEBUGF(...)           \
+	char buffer[100];             \
+	sprintf(buffer, __VA_ARGS__); \
+	Serial.print(buffer);
 #else
 #define MPU_DEBUG(...)
 #define MPU_DEBUGLN(...)
 #define MPU_DEBUGVAL(...)
+#define MPU_DEBUGF(...)
 #endif
 
 typedef void (*mpuInterrupFunction)(void);
@@ -45,6 +55,7 @@ public:
 
 	double *getAngleXptr();
 	double *getAngleYptr();
+	double *getAngleZptr();
 
 	void detectDevices();
 	void dmpDataReady();
@@ -53,19 +64,26 @@ private:
 	int pinInterupt;
 
 	MPU6050 *accelgyro;
-	// int16_t ax, ay, az, gx, gy, gz;
-	// int16_t zax, zay, zaz, zgx, zgy, zgz;
 
-	// int slidingAverageIndex;
-	// double slidingAverageX[AVERAGE_SLIDE];
-	// double slidingAverageY[AVERAGE_SLIDE];
 	double angleX;
 	double angleY;
+	double angleZ;
 
 	void refreshSensors();
-	// void computeAngles(double);
-	// double constraintAngle(double*);
-	// double toReadableDegr(double);
+
+#ifndef MODE_DMP
+	int16_t ax, ay, az, gx, gy, gz;
+	int16_t zax, zay, zaz, zgx, zgy, zgz;
+	int slidingAverageIndex;
+	double slidingAverageX[AVERAGE_SLIDE];
+	double slidingAverageY[AVERAGE_SLIDE];
+
+	void computeAngles(double);
+	double constraintAngle(double *);
+	double toReadableDegr(double);
+#endif
+
+#ifdef MODE_DMP
 
 	volatile bool mpuInterrupt = false;
 
@@ -77,15 +95,11 @@ private:
 	uint8_t fifoBuffer[64]; // FIFO storage buffer
 	// orientation/motion vars
 	Quaternion q;		 // [w, x, y, z]         quaternion container
-	VectorInt16 aa;		 // [x, y, z]            accel sensor measurements
-	VectorInt16 aaReal;	 // [x, y, z]            gravity-free accel sensor measurements
-	VectorInt16 aaWorld; // [x, y, z]            world-frame accel sensor measurements
 	VectorFloat gravity; // [x, y, z]            gravity vector
 	float euler[3];		 // [psi, theta, phi]    Euler angle container
 	float ypr[3];		 // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 
-	// packet structure for InvenSense teapot demo
-	uint8_t teapotPacket[14] = {'$', 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0x00, 0x00, '\r', '\n'};
+#endif
 };
 
 #endif

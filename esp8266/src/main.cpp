@@ -8,8 +8,8 @@ const char *ssid = "marly-iot";
 const char *password = "jpTMP12Wp1";
 const char *mqtt_server = "192.168.1.12";
 const int mqtt_pord = 1884;
-const char *mqtt_user = "homie";
-const char *mqtt_password = "3kr1vn6I6yUT8juHDBsT";
+const char *mqtt_user = "ballbot";
+const char *mqtt_password = "4EQzcQi4e1WAXC6Oi7l7";
 String baseStatusTopic = "ballbot/status/";
 String baseCommandTopic = "ballbot/cmd/";
 

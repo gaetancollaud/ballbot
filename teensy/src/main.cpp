@@ -16,8 +16,8 @@ structMotorConfig m3 = {12, 11, 7, 8, PI_180};
 // Motors motors(m1, m2, m3, &motorSpeedPid);
 MPUSensor sensor(23);
 SingleMotor motor1(m1, &motorSpeedPid);
-Console console(0, 0, 0, 0, 0);
-Status status(&console, 13);
+Console console(0, 0, 0, 0, 0, &motorSpeedPid);
+Status status(&console, &sensor, 13);
 
 void dmpDataReady()
 {

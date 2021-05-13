@@ -1,6 +1,6 @@
 #include "status.h"
 
-Status::Status(Console *console, int ledPin) : console(console), ledPin(ledPin)
+Status::Status(Console *console, MPUSensor *sensor, int ledPin) : console(console), sensor(sensor), ledPin(ledPin)
 {
 }
 
@@ -23,11 +23,20 @@ void Status::loop(unsigned long nowMs, double dtS)
         fpsCount = 0;
     }
 
-    this->counter++;
-    if (this->counter >= STATUS_FACTOR)
+    // update
+    if (nowMs > nextUpdate)
     {
-        this->previousState = !this->previousState;
-        this->counter = 0;
-        digitalWrite(this->ledPin, this->previousState ? HIGH : LOW);
+        nextUpdate = nowMs + UPDATE_INTERVAL_MS;
+        this->console->sendItem("angleX", *this->sensor->getAngleXptr());
+        this->console->sendItem("angleY", *this->sensor->getAngleYptr());
+        this->console->sendItem("angleZ", *this->sensor->getAngleZptr());
+    }
+
+    this->ledCounter++;
+    if (this->ledCounter >= STATUS_LED_FACTOR)
+    {
+        this->ledState = !this->ledState;
+        this->ledCounter = 0;
+        digitalWrite(this->ledPin, this->ledState ? HIGH : LOW);
     }
 }

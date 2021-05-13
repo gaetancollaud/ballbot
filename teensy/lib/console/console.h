@@ -10,7 +10,7 @@
 class Console
 {
 public:
-    Console(Motors *motors, Balance *balance, Position *position, structPid *balancePid, structPid *positionPid);
+    Console(Motors *motors, Balance *balance, Position *position, structPid *balancePid, structPid *positionPid, structPid *motorPid);
     void init();
     void loop(unsigned long, double);
     void sendItem(String item, String value);
@@ -23,11 +23,12 @@ private:
     Position *position;
     structPid *balancePid;
     structPid *positionPid;
+    structPid *motorPid;
 
     String inputString;
 
     void analyse();
-    float getFloatValue();
+    void handleValue(String item, String value);
 };
 
 #endif
