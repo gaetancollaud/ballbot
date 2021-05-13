@@ -3,12 +3,15 @@
 
 #include "Arduino.h"
 
+// #define MODE_DMP
+
 #include <I2Cdev.h>
-// #include <MPU6050.h>
 #include <Wire.h>
 #include <helper_3dmath.h>
 
-// #define MODE_DMP
+#ifndef MODE_DMP
+#include <MPU6050.h>
+#endif
 
 #ifndef MODE_DMP
 #define GYRO_TRUST 0.999
@@ -22,7 +25,7 @@
 #define AVERAGE_SLIDE_REVERSE (1.0 / AVERAGE_SLIDE)
 #endif
 
-#define DEBUG_MPU
+// #define DEBUG_MPU
 
 #ifdef DEBUG_MPU
 #define MPU_DEBUG(...) Serial.print(__VA_ARGS__);
@@ -70,6 +73,7 @@ private:
 	double angleZ;
 
 	void refreshSensors();
+	void computeAngles(double);
 
 #ifndef MODE_DMP
 	int16_t ax, ay, az, gx, gy, gz;
@@ -78,7 +82,6 @@ private:
 	double slidingAverageX[AVERAGE_SLIDE];
 	double slidingAverageY[AVERAGE_SLIDE];
 
-	void computeAngles(double);
 	double constraintAngle(double *);
 	double toReadableDegr(double);
 #endif

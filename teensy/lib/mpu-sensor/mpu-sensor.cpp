@@ -1,6 +1,8 @@
 #include "mpu-sensor.h"
 
+#ifdef MODE_DMP
 #include <MPU6050_6Axis_MotionApps20.h>
+#endif
 
 MPUSensor::MPUSensor(int pinInterupt) : pinInterupt(pinInterupt)
 {
@@ -245,21 +247,21 @@ void MPUSensor::refreshSensors()
 {
 	accelgyro->getMotion6(&this->ax, &this->ay, &this->az, &this->gx, &this->gy, &this->gz);
 
-	if (
-		abs(this->ax) >= ALLERT_TRESHOLD ||
-		abs(this->ay) >= ALLERT_TRESHOLD ||
-		abs(this->az) >= ALLERT_TRESHOLD)
-	{
-		Serial.println("/!\\ MPU6050 Accel limits !!!");
-	}
+	// if (
+	// 	abs(this->ax) >= ALLERT_TRESHOLD ||
+	// 	abs(this->ay) >= ALLERT_TRESHOLD ||
+	// 	abs(this->az) >= ALLERT_TRESHOLD)
+	// {
+	// 	Serial.println("/!\\ MPU6050 Accel limits !!!");
+	// }
 
-	if (
-		abs(this->gx) >= ALLERT_TRESHOLD ||
-		abs(this->gy) >= ALLERT_TRESHOLD ||
-		abs(this->gz) >= ALLERT_TRESHOLD)
-	{
-		Serial.println("/!\\ MPU6050 Gyro limits !!!");
-	}
+	// if (
+	// 	abs(this->gx) >= ALLERT_TRESHOLD ||
+	// 	abs(this->gy) >= ALLERT_TRESHOLD ||
+	// 	abs(this->gz) >= ALLERT_TRESHOLD)
+	// {
+	// 	Serial.println("/!\\ MPU6050 Gyro limits !!!");
+	// }
 
 	this->ax -= this->zax;
 	this->ay -= this->zay;
@@ -297,8 +299,8 @@ void MPUSensor::computeAngles(double dtS)
 	double finalY = GYRO_TRUST * (angleY + gyroYRate) + GYRO_REVERSE_TRUST * accYangle;
 
 	//BEGIN sliding average
-	slidingAverageX[slidingAverageIndex]=finalX;
-	slidingAverageY[slidingAverageIndex]=finalY;
+	slidingAverageX[slidingAverageIndex] = finalX;
+	slidingAverageY[slidingAverageIndex] = finalY;
 
 	double sumX = 0;
 	double sumY = 0;
