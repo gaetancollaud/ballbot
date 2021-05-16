@@ -229,7 +229,7 @@ void MPUSensor::refreshSensors()
 			accelgyro->dmpGetGravity(&gravity, &q);
 			accelgyro->dmpGetYawPitchRoll(eulerValues, &q, &gravity);
 
-			this->angleX = eulerValues[2];
+			this->angleX = -eulerValues[2];
 			this->angleY = eulerValues[1];
 			this->angleZ = eulerValues[0];
 
