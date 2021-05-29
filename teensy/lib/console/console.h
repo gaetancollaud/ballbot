@@ -7,6 +7,25 @@
 
 #define CONSOLE_SERIAL Serial2
 
+
+
+#ifdef DEBUG_CONSOLE
+#define CONSOLE_DEBUG(...) Serial.print(__VA_ARGS__);
+#define CONSOLE_DEBUGLN(...) Serial.println(__VA_ARGS__);
+#define CONSOLE_DEBUGVAL(...)      \
+	Serial.print(__VA_ARGS__); \
+	Serial.print("\t");
+#define CONSOLE_DEBUGF(...)           \
+	char buffer[100];             \
+	sprintf(buffer, __VA_ARGS__); \
+	Serial.print(buffer);
+#else
+#define CONSOLE_DEBUG(...)
+#define CONSOLE_DEBUGLN(...)
+#define CONSOLE_DEBUGVAL(...)
+#define CONSOLE_DEBUGF(...)
+#endif
+
 class Console
 {
 public:

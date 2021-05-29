@@ -3,7 +3,7 @@
 
 #include "Arduino.h"
 
-#define MODE_DMP
+// #define MODE_DMP
 
 #include <I2Cdev.h>
 #include <Wire.h>

@@ -6,7 +6,6 @@ import toxi.geom.*;
 import toxi.processing.*;
 import mqtt.*;
 
-
 // NOTE: requires ToxicLibs to be installed in order to run properly.
 // 1. Download from http://toxiclibs.org/downloads
 // 2. Extract into [userdir]/Processing/libraries
@@ -34,8 +33,8 @@ void setup() {
     client = new MQTTClient(this);
     client.connect("mqtt://ballbot:4EQzcQi4e1WAXC6Oi7l7@192.168.1.12:1884", "processing");
   
-    // 300px square viewport using OpenGL rendering
-    size(300, 300, OPENGL);
+    // Must be squared !
+    size(800, 800, OPENGL);
     gfx = new ToxiclibsSupport(this);
 
     // setup lights and antialiasing
@@ -64,6 +63,10 @@ void messageReceived(String topic, byte[] payload) {
   
 }
 
+int relativeSize(int size){
+  return width / 300 * size;
+}
+
 void draw() {
     // black background
     background(0);
@@ -87,31 +90,31 @@ void draw() {
 
     // draw main body in red
     fill(255, 0, 0, 200);
-    box(10, 10, 200);
+    box(relativeSize(10), relativeSize(10), relativeSize(200));
     
     // draw front-facing tip in blue
     fill(0, 0, 255, 200);
     pushMatrix();
-    translate(0, 0, -120);
+    translate(0, 0, relativeSize(-120));
     rotateX(PI/2);
-    drawCylinder(0, 20, 20, 8);
+    drawCylinder(relativeSize(0), relativeSize(20), relativeSize(20), relativeSize(8));
     popMatrix();
     
     // draw wings and tail fin in green
     fill(0, 255, 0, 200);
     beginShape(TRIANGLES);
-    vertex(-100,  2, 30); vertex(0,  2, -80); vertex(100,  2, 30);  // wing top layer
-    vertex(-100, -2, 30); vertex(0, -2, -80); vertex(100, -2, 30);  // wing bottom layer
-    vertex(-2, 0, 98); vertex(-2, -30, 98); vertex(-2, 0, 70);  // tail left layer
-    vertex( 2, 0, 98); vertex( 2, -30, 98); vertex( 2, 0, 70);  // tail right layer
+    vertex(relativeSize(-100),  relativeSize(2), relativeSize(30)); vertex(relativeSize(0),  relativeSize(2), relativeSize(-80)); vertex(relativeSize(100),  relativeSize(2), relativeSize(30));  // wing top layer
+    vertex(relativeSize(-100), relativeSize(-2), relativeSize(30)); vertex(relativeSize(0), relativeSize(-2), relativeSize(-80)); vertex(relativeSize(100), relativeSize(-2), relativeSize(30));  // wing bottom layer
+    vertex(relativeSize(-2), relativeSize(0), relativeSize(98)); vertex(relativeSize(-2), relativeSize(-30), relativeSize(98)); vertex(relativeSize(-2), relativeSize(0), relativeSize(70));  // tail left layer
+    vertex(relativeSize( 2), relativeSize(0), relativeSize(98)); vertex(relativeSize( 2), relativeSize(-30), relativeSize(98)); vertex(relativeSize( 2), relativeSize(0), relativeSize(70));  // tail right layer
     endShape();
     beginShape(QUADS);
-    vertex(-100, 2, 30); vertex(-100, -2, 30); vertex(  0, -2, -80); vertex(  0, 2, -80);
-    vertex( 100, 2, 30); vertex( 100, -2, 30); vertex(  0, -2, -80); vertex(  0, 2, -80);
-    vertex(-100, 2, 30); vertex(-100, -2, 30); vertex(100, -2,  30); vertex(100, 2,  30);
-    vertex(-2,   0, 98); vertex(2,   0, 98); vertex(2, -30, 98); vertex(-2, -30, 98);
-    vertex(-2,   0, 98); vertex(2,   0, 98); vertex(2,   0, 70); vertex(-2,   0, 70);
-    vertex(-2, -30, 98); vertex(2, -30, 98); vertex(2,   0, 70); vertex(-2,   0, 70);
+    vertex(relativeSize(-100), relativeSize(2), relativeSize(30)); vertex(relativeSize(-100), relativeSize(-2), relativeSize(30)); vertex(relativeSize(  0), relativeSize(-2), relativeSize(-80)); vertex(relativeSize(0), relativeSize(2), relativeSize(-80));
+    vertex( relativeSize(100), relativeSize(2), relativeSize(30)); vertex( relativeSize(100), relativeSize(-2), relativeSize(30)); vertex(  relativeSize(0), relativeSize(-2), relativeSize(-80)); vertex(relativeSize(0), relativeSize(2), relativeSize(-80));
+    vertex(relativeSize(-100), relativeSize(2), relativeSize(30)); vertex(relativeSize(-100), relativeSize(-2), relativeSize(30)); vertex(relativeSize(100), relativeSize(-2), relativeSize(30)); vertex(relativeSize(100), relativeSize(2),  relativeSize(30));
+    vertex(relativeSize(-2),   relativeSize(0), relativeSize(98)); vertex(relativeSize(2),   relativeSize(0), relativeSize(98)); vertex(relativeSize(2), relativeSize(-30), relativeSize(98)); vertex(relativeSize(-2), relativeSize(-30), relativeSize(98));
+    vertex(relativeSize(-2),   relativeSize(0), relativeSize(98)); vertex(relativeSize(2),   relativeSize(0), relativeSize(98)); vertex(relativeSize(2),   relativeSize(0), relativeSize(70)); vertex(relativeSize(-2),   relativeSize(0), relativeSize(70));
+    vertex(relativeSize(-2), relativeSize(-30), relativeSize(98)); vertex(relativeSize(2), relativeSize(-30), relativeSize(98)); vertex(relativeSize(2),   relativeSize(0), relativeSize(70)); vertex(relativeSize(-2),   relativeSize(0), relativeSize(70));
     endShape();
     
     popMatrix();

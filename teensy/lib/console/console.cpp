@@ -39,7 +39,7 @@ void Console::loop(unsigned long, double)
 
 void Console::sendItem(String item, String value)
 {
-	Serial.println("i sending " + item + "=" + value);
+	CONSOLE_DEBUG("i sending " + item + "=" + value);
 
 	CONSOLE_SERIAL.print("s ");
 	CONSOLE_SERIAL.print(item);
@@ -93,7 +93,7 @@ void Console::analyse()
 void Console::handleValue(String item, String value)
 {
 
-	Serial.println("i received item=" + item + ", value=" + value);
+	CONSOLE_DEBUG("i received item=" + item + ", value=" + value);
 	if (item.equals("reset"))
 	{
 		this->motors->reset();
