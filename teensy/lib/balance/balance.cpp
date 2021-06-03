@@ -25,7 +25,8 @@ void Balance::init(){
 void Balance::toggleEnable(){
 	this->enable = !this->enable;
 	if(this->enable) {
-		this->reset();
+		// this->reset();
+		this->motors->setSpeed(50,50);
 	}else{
 		this->motors->setSpeed(0,0);
 	}

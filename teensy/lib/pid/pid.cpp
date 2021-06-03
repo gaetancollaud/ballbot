@@ -68,8 +68,8 @@ void PID::constraint(double *v, double lim, String deb)
 		*v = lim;
 		if (this->debug)
 		{
-			Serial.print("High limit: ");
-			Serial.println(deb);
+			// Serial.print("High limit: ");
+			// Serial.println(deb);
 		}
 	}
 	else if (*v < -lim)
@@ -77,8 +77,8 @@ void PID::constraint(double *v, double lim, String deb)
 		*v = -lim;
 		if (this->debug)
 		{
-			Serial.print("Low limit: ");
-			Serial.println(deb);
+			// Serial.print("Low limit: ");
+			// Serial.println(deb);
 		}
 	}
 }

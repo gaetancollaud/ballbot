@@ -39,7 +39,7 @@ void Console::loop(unsigned long, double)
 
 void Console::sendItem(String item, String value)
 {
-	CONSOLE_DEBUG("i sending " + item + "=" + value);
+//	CONSOLE_DEBUGLN("i sending " + item + "=" + value);
 
 	CONSOLE_SERIAL.print("s ");
 	CONSOLE_SERIAL.print(item);
@@ -73,7 +73,7 @@ void Console::analyse()
 		int index = itemAndValue.indexOf(" ");
 		if (index == -1)
 		{
-			Serial.print("e parse error: " + inputString);
+			Serial.println("e parse error: " + inputString);
 		}
 		else
 		{
@@ -93,7 +93,7 @@ void Console::analyse()
 void Console::handleValue(String item, String value)
 {
 
-	CONSOLE_DEBUG("i received item=" + item + ", value=" + value);
+	CONSOLE_DEBUGLN("i received item=" + item + ", value=" + value);
 	if (item.equals("reset"))
 	{
 		this->motors->reset();
@@ -146,6 +146,11 @@ void Console::handleValue(String item, String value)
 		this->motors->setSpeed(0, 0);
 	}
 	else if (item.equals("enabled"))
+	{
+		this->balance->toggleEnable();
+		this->position->toggleEnable();
+	}
+	else if (item.equals("motor"))
 	{
 		this->balance->toggleEnable();
 		this->position->toggleEnable();

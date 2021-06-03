@@ -8,6 +8,7 @@
 #define CONSOLE_SERIAL Serial2
 
 
+#define DEBUG_CONSOLE
 
 #ifdef DEBUG_CONSOLE
 #define CONSOLE_DEBUG(...) Serial.print(__VA_ARGS__);

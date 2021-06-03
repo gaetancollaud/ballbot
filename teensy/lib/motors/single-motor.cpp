@@ -34,6 +34,8 @@ void SingleMotor::reset()
 void SingleMotor::setSpeed(double speed)
 {
 	this->targetSpeed = map(speed, -100, 100, -1000, 1000);
+	Serial.print("Set speed to ");
+	Serial.println(this->targetSpeed);
 	// this->targetSpeed = constrain(speed, -100, 100);
 }
 

@@ -27,7 +27,7 @@ void MPUSensor::init(mpuInterrupFunction func)
 	Wire.begin();
 	Wire.setClock(400000);
 	accelgyro->initialize();
-	int retryLeft = 5;
+	int retryLeft = 2;
 	while (!accelgyro->testConnection() && retryLeft-- > 0)
 	{
 		Serial.println("Cannot connect to MPU6050");
