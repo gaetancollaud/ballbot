@@ -91,7 +91,7 @@ void Motors::setSpeed(double dx, double dy)
 
 	MOTORS_DEBUG("vect\t");
 	MOTORS_DEBUG(vectorSize);
-	MOTORS_DEBUG(":");
+	MOTORS_DEBUG("\t");
 	MOTORS_DEBUGLN(vectorAngle * RAD_TO_DEGR);
 
 	for (int i = 0; i < 3; i++)

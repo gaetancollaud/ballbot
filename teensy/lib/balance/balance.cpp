@@ -8,8 +8,8 @@ Balance::Balance(MPUSensor* sensor, Motors* motors, structPid* pidBalance) : sen
 	this->nextTime = 0;
 	this->enable = false;
 
-	double maxOutput = 60;
-	double maxIntegral = 0.05;
+	double maxOutput = 100;
+	double maxIntegral = 10000;
 	pidBalanceX.setLimitOutput(maxOutput);
 	pidBalanceY.setLimitOutput(maxOutput);
 	pidBalanceX.setLimitIntegral(maxIntegral);
@@ -25,8 +25,7 @@ void Balance::init(){
 void Balance::toggleEnable(){
 	this->enable = !this->enable;
 	if(this->enable) {
-		// this->reset();
-		this->motors->setSpeed(50,50);
+		this->reset();
 	}else{
 		this->motors->setSpeed(0,0);
 	}

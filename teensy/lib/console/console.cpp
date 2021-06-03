@@ -93,7 +93,7 @@ void Console::analyse()
 void Console::handleValue(String item, String value)
 {
 
-	CONSOLE_DEBUGLN("i received item=" + item + ", value=" + value);
+	Serial.println("i received item=" + item + ", value=" + value);
 	if (item.equals("reset"))
 	{
 		this->motors->reset();
@@ -154,6 +154,23 @@ void Console::handleValue(String item, String value)
 	{
 		this->balance->toggleEnable();
 		this->position->toggleEnable();
+	}
+	else if (item.equals("balancePID"))
+	{
+		int first = value.indexOf(':');
+		int second = value.indexOf(':', first+1);
+
+
+		this->balancePid->p = value.substring(0, first).toFloat();
+		this->balancePid->i = value.substring(first+1, second).toFloat();
+		this->balancePid->d = value.substring(second+1).toFloat();
+
+		Serial.print("Setting PID to ");
+		Serial.print(this->balancePid->p);
+		Serial.print("\t");
+		Serial.print(this->balancePid->i);
+		Serial.print("\t");
+		Serial.println(this->balancePid->d);
 	}
 	else
 	{

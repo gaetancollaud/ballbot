@@ -5,7 +5,7 @@
 #include <angles.h>
 #include "single-motor.h"
 
-// #define DEBUG_MOTORS
+#define DEBUG_MOTORS
 
 #ifdef DEBUG_MOTORS
 #define MOTORS_DEBUG(...) Serial.print(__VA_ARGS__);

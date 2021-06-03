@@ -34,8 +34,6 @@ void SingleMotor::reset()
 void SingleMotor::setSpeed(double speed)
 {
 	this->targetSpeed = map(speed, -100, 100, -1000, 1000);
-	Serial.print("Set speed to ");
-	Serial.println(this->targetSpeed);
 	// this->targetSpeed = constrain(speed, -100, 100);
 }
 
@@ -61,19 +59,6 @@ void SingleMotor::loop(unsigned long nowMs, double dtS)
 
 		MOTOR_DEBUGF("encoder: %d\tcount: %d\tcurrent: %5.0f\ttarget: %5.0f\toutput: %3.2f", ev, ecDiff, this->currentSpeed, this->targetSpeed, this->outputSpeed)
 		MOTOR_DEBUGLN()
-		
-
-		// MOTOR_DEBUG("encoder: ");
-		// MOTOR_DEBUG(ev);
-		// MOTOR_DEBUG("\tcount: ");
-		// MOTOR_DEBUG(ecDiff);
-		// MOTOR_DEBUG("\tcurrent: ");
-		// MOTOR_DEBUG(this->currentSpeed);
-		// MOTOR_DEBUG("\ttarget: ");
-		// MOTOR_DEBUG(this->targetSpeed);
-		// MOTOR_DEBUG("\toutput: ");
-		// MOTOR_DEBUG(this->outputSpeed);
-		// MOTOR_DEBUGLN();
 	}
 }
 

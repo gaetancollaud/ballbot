@@ -8,7 +8,7 @@
 void initEncoderInterupt();
 
 structPid motorSpeedPid = {.p = 200, .i = 5, .d = 0};
-structPid balancePid = {.p=300.0, .i=14.0, .d=600.0};
+structPid balancePid = {.p=60000.0, .i=50000.0, .d=500.0};
 structPid positionPid = {.p=0.000, .i=0.0, .d=0.0};
 
 structMotorConfig m1 = {17, 16, 12, 11, -PI_60};
